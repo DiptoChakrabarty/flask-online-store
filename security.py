@@ -13,3 +13,6 @@ def auth(username,passwd):
 def identity(payload):
     user_id= payload['identity']
     return users.query.filter_by(id=user_id)
+
+
+    
