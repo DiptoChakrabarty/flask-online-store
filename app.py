@@ -25,6 +25,20 @@ class users(db.Model):
         self.username = username
         self.password = password
 
+class users(Resource):
+    def post(self):
+        data = request.get_json()
+        username = data["username"]
+        passwd = data["password"]
+        hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
+
+        new_user = users(username=username,password=hashed)
+        db.session.add(new_user)
+        db.sesssion.commit()
+        return jsonify({
+        "msg": "User Added",
+        "status": 200
+            })
 
 class Item(Resource):
     def get(self):
