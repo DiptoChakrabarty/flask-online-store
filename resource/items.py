@@ -9,7 +9,6 @@ class Item(Resource):
     help="This cannot be blank")
 
     parser.add_argument('name',
-    type=string,
     required=True,
     help="This cannot be blank")
 

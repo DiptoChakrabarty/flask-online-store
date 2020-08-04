@@ -1,5 +1,5 @@
 import bcrypt 
-from app import users
+from model.users import users
 
 def auth(username,passwd):
     user = users.query.filter_by(username=username).first()

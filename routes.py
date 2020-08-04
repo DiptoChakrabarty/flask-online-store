@@ -1,3 +1,7 @@
+from app import app,db,api
+from resource.items import Item
+from resource.users import users
+
 @app.before_first_request
 def create_tables():
     db.create_all()
