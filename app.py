@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify,request
 from flask_restful import Resource,Api
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,19 +10,45 @@ app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///site.db"
 
 db = SQLAlchemy(app)
 
-class Product(db.Model):
+class product(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(20),unique=True,nullable=False)
     price = db.Column(db.String(20),nullable=False)
 
+class Item(Resource):
+    def get(self):
+        data = request.get_json()
+        print(data)
+        name = data["name"]
+        item = product.query.filter_by(name=name).first()
+        ret = {
+            "name": item.name,
+            "price": item.price
+        }
+        return ret
+    
+    def post(self):
+        data = request.get_json()
+        name = data["name"]
+        price = data["price"]
+        print(data)
 
+        item = product(name=name,price=price)
+        db.session.add(item)
+        db.session.commit()
+        ret = {
+            "name": item.name,
+            "price": item.price
+        }
+        return ret
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
 
-
+#api.add_resource(Item,"/item/<string:name>")
+api.add_resource(Item,"/item")
 
 
 if __name__ == "__main__":
