@@ -21,15 +21,11 @@ class Item(Resource):
         item = ItemModel.find_by_name(name)
 
         if item:
-            ret = {
-                "name": item.name,
-                "price": item.price
-            }
-        else:
-            ret = {
-                "msg": "Not found"
-            }
-        return ret
+            return item.json()
+        return {
+            "msg": "Item not found"
+        }
+            
     
     def post(self):
         data = Item.parser.parse_args()
@@ -37,28 +33,25 @@ class Item(Resource):
         price = data["price"]
         print(data)
 
-        item = product(name=name,price=price)
-        db.session.add(item)
-        db.session.commit()
-        ret = {
-            "name": item.name,
-            "price": item.price
-        }
-        return ret
+        item = ItemModel(name,price)
+
+        try:
+            item.save_to_db()
+        except:
+            return {"msg": "Error occured"}
+        return item.json() , 201
     
     def delete(self):
         data = Item.parser.parse_args()
         name = data["name"]
         price = data["price"]
 
-        item = product.query.filter_by(name=name)
-        db.session.delete(item)
-        db.session.commit()
+        item = ItemModel.find_by_name(name)
+        if item:
+            item.delete_from_db()
+            return {"msg": "Item deleted successfully"}
+        return {"msg": "Item not found"},404
 
-        ret = {
-            "msg": "Item Deleted"
-        }
-        return ret
 
     def put(self):
        
@@ -66,12 +59,13 @@ class Item(Resource):
         name = data["name"]
         price = data["price"]
 
-        item = product.query.filter_by(name=name)
-        item.price = price
+        item = ItemModel.find_by_name(name)
 
-        db.session.commit()
+        if item:
+            item.price = price
+        else:
+            return item.json()
+        
+        item.save_to_db()
 
-        ret = {
-            "msg": "Item Updated with price {}".format(price)
-        }
-        return ret
+        return item.json()
