@@ -1,18 +1,18 @@
 import bcrypt 
-from model.users import users
+from model.users import UserModel
 
 def auth(username,passwd):
-    user = users.query.filter_by(username=username).first()
+    user = UserModel.find_by_username(username)
     passwd = passwd.encode('utf-8')
 
-    if bcrypt.checkpw(passwd,user.password) and user:
+    if userModel.checkpassword(username,password):
         return user
     else:
-        return "Incorrect"
+        return None
     
 def identity(payload):
     user_id= payload['identity']
-    return users.query.filter_by(id=user_id)
+    return UserModel.find_by_id(user_id)
 
 
     

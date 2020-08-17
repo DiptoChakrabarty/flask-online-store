@@ -20,5 +20,13 @@ class UserModel(db.Model):
         return cls.query.filter_by(username=username).first()
     
     @classmethod
+    def check_password(cls,username,password):
+        user=cls.query.filter_by(username=username).first()
+        if bcrypt.checkpw(password,user.password) and user:
+            return True
+        else:
+            return False
+    
+    @classmethod
     def find_by_id(cls,_id):
         return cls.query.filter_by(id=_id).first()

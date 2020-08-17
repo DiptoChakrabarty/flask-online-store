@@ -69,3 +69,7 @@ class Item(Resource):
         item.save_to_db()
 
         return item.json()
+    
+class ItemList(Resource):
+    def get(self):
+        return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
