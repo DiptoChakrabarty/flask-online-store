@@ -12,7 +12,7 @@ class UserModel(db.Model):
         self.password = password
     
     def save_to_db(self):
-        db.session.add(Self)
+        db.session.add(self)
         db.session.commit()
     @classmethod
     def find_by_username(cls,username):

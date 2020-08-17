@@ -1,5 +1,7 @@
 
 from flask_restful import Resource,reqparse
+from flask_jwt import jwt_required
+from models.item import ItemModel
 
 class Item(Resource):
     parser = reqparse.RequestParser()
@@ -14,9 +16,9 @@ class Item(Resource):
 
     def get(self):
         data = Item.parser.parse_args()
-        print(data)
+        #print(data)
         name = data["name"]
-        item = product.query.filter_by(name=name).first()
+        item = ItemModel.find_by_name(name)
 
         if item:
             ret = {
