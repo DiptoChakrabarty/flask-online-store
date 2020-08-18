@@ -14,6 +14,11 @@ class Item(Resource):
     required=True,
     help="This cannot be blank")
 
+    parser.add_argument('store_id',
+    required=True,
+    type=int,
+    help="This cannot be blank")
+
     def get(self):
         data = Item.parser.parse_args()
         #print(data)
@@ -31,9 +36,10 @@ class Item(Resource):
         data = Item.parser.parse_args()
         name = data["name"]
         price = data["price"]
+        store_id = data["store_id"]
         print(data)
 
-        item = ItemModel(name,price)
+        item = ItemModel(name,price,store_id)
 
         try:
             item.save_to_db()
