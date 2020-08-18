@@ -1,6 +1,7 @@
 from flask_restful import Resource,reqparse
 import bcrypt
 from model.users import UserModel
+from flask import request
 
 class users(Resource):
     def post(self):

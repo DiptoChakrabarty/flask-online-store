@@ -1,4 +1,5 @@
 from db import db
+import bcrypt
 
 
 class UserModel(db.Model):
@@ -7,8 +8,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(20),nullable=False)
 
-    def __init__(self,_id,username,password):
-        self.id=_id
+    def __init__(self,username,password):
         self.username = username
         self.password = password
     
@@ -22,7 +22,7 @@ class UserModel(db.Model):
     @classmethod
     def check_password(cls,username,password):
         user=cls.query.filter_by(username=username).first()
-        if bcrypt.checkpw(password,user.password) and user:
+        if user and bcrypt.checkpw(password,user.password):
             return True
         else:
             return False

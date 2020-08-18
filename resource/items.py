@@ -53,6 +53,7 @@ class Item(Resource):
         return {"msg": "Item not found"},404
 
 
+    @jwt_required()
     def put(self):
        
         data = Item.parser.parse_args()

@@ -1,11 +1,12 @@
 import bcrypt 
 from model.users import UserModel
 
-def auth(username,passwd):
+def auth(username,password):
     user = UserModel.find_by_username(username)
-    passwd = passwd.encode('utf-8')
+    password = password.encode('utf-8')
+    print(password)
 
-    if userModel.checkpassword(username,password):
+    if UserModel.check_password(username,password):
         return user
     else:
         return None
