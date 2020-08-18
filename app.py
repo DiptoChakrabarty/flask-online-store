@@ -5,23 +5,27 @@ import bcrypt
 
 from security import auth,identity
 from resource.users import users
-from resource.items import Item
+from resource.items import Item,ItemList
 
 app = Flask(__name__)
 app.secret_key="pinku"
 api=Api(app)
 
-jwt=JWT(app,auth,identity)
+
 
 app.config["SECRET_KEY"]= "diptochuck"
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///site.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
 
+@app.before_first_request
+def create_tables():
+    db.create_all()
+jwt=JWT(app,auth,identity)
 
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/items_show")
 api.add_resource(users,"/register")
 
-import routes
 
 if __name__ == "__main__":
     from db import db
