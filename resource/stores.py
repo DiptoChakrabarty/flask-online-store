@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from models.store import StoreModel
+from model.store import StoreModel
 from flask import request
 
 class Store(Resource):
@@ -41,5 +41,7 @@ class Store(Resource):
 
 
 class StoreList(Resource):
+    def get(self):
+        return  {'stores': list(map(lambda x: x.json(), StoreModel.query.all()))}
 
 

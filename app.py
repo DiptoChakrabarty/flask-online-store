@@ -6,6 +6,7 @@ import bcrypt
 from security import auth,identity
 from resource.users import users
 from resource.items import Item,ItemList
+from resource.stores import  Store,StoreList
 
 app = Flask(__name__)
 app.secret_key="pinku"
@@ -20,11 +21,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
 @app.before_first_request
 def create_tables():
     db.create_all()
+    
 jwt=JWT(app,auth,identity)
 
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/items_show")
 api.add_resource(users,"/register")
+api.add_resource(Store,"/store")
+api.add_resource(StoreList,"/storesall")
 
 
 if __name__ == "__main__":
