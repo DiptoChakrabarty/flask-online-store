@@ -1,10 +1,10 @@
 from flask import Flask,jsonify,request
 from flask_restful import Resource,Api,reqparse
-from flask_jwt import JWT,jwt_required
+from flask_jwt_extended import JWTManager
 import bcrypt
 
 from security import auth,identity
-from resource.users import users,usermethods
+from resource.users import userregister,usermethods,userlogin
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 
@@ -23,14 +23,15 @@ app.config["PROPAGATE_EXCEPTIONS"]= True
 def create_tables():
     db.create_all()
     
-jwt=JWT(app,auth,identity)
+jwt=JWTManager(app)
 
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/items_show")
-api.add_resource(users,"/register")
+api.add_resource(userregister,"/register")
 api.add_resource(Store,"/store")
 api.add_resource(StoreList,"/storesall")
 api.add_resource(usermethods,"/user/<int:user_id>")
+api.add_resource(userlogin,"/auth")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 
 from flask_restful import Resource,reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 from model.item import ItemModel
 
 class Item(Resource):
@@ -59,7 +59,7 @@ class Item(Resource):
         return {"msg": "Item not found"},404
 
 
-    @jwt_required()
+    @jwt_required
     def put(self):
        
         data = Item.parser.parse_args()

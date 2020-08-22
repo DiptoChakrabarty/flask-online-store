@@ -2,8 +2,9 @@ from flask_restful import Resource,reqparse
 import bcrypt
 from model.users import UserModel
 from flask import request
+from flask_jwt_extended import create_access_token,refresh_access_token
 
-class users(Resource):
+class userregister(Resource):
     def post(self):
         data = request.get_json()
         username = data["username"]
@@ -38,7 +39,24 @@ class usermethods(Resource):
         
         return {"msg": "user deleted successfully"}
 
+class userlogin(Resource):
+    def post(self):
+        data=request.get_json()
+        username = data["username"]
+        password = data["password"]
 
+        user = UserModel.find_by_username(username)
+
+        if user and UserModel.check_password(username,password):
+            access_token = create_access_token(identity=user.id,fresh=True)
+            refresh_token = create_refresh_token(user.id)
+
+            return {
+                "access_token": access_token,
+                "refresh_token": refresh_token
+            },200
+        
+        return {"msg: "wrong creds"},401
    
 
 
