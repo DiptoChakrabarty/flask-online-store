@@ -25,6 +25,16 @@ def create_tables():
     
 jwt=JWTManager(app)
 
+@jwt.user_claims_loader
+def add_claims(identity):
+    if identity == 1:
+        return {
+            "is_admin": True
+        }
+    return {
+        "is_admin": False
+    }
+
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/items_show")
 api.add_resource(userregister,"/register")

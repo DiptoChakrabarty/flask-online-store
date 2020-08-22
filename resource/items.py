@@ -61,6 +61,9 @@ class Item(Resource):
 
     @jwt_required
     def put(self):
+        claims = get_jwt_claims()
+        if not claims["is_admin"]:
+            return {"message": "Admin right required"},401
        
         data = Item.parser.parse_args()
         name = data["name"]
