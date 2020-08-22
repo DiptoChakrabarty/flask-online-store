@@ -17,6 +17,7 @@ api=Api(app)
 app.config["SECRET_KEY"]= "diptochuck"
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
+app.config["PROPAGATE_EXCEPTIONS"]= True
 
 @app.before_first_request
 def create_tables():
