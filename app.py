@@ -4,7 +4,7 @@ from flask_jwt import JWT,jwt_required
 import bcrypt
 
 from security import auth,identity
-from resource.users import users
+from resource.users import users,usermethods
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 
@@ -30,6 +30,7 @@ api.add_resource(ItemList,"/items_show")
 api.add_resource(users,"/register")
 api.add_resource(Store,"/store")
 api.add_resource(StoreList,"/storesall")
+api.add_resource(usermethods,"/user/<int:user_id>")
 
 
 if __name__ == "__main__":

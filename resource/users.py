@@ -20,6 +20,24 @@ class users(Resource):
             "msg": "user saved successfully"
         }
 
+class usermethods(Resource):
+    @classmethod
+    def get(cls,user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"msg": "User not found"},404
+        
+        return user.json
+    
+    @classmethod
+    def get(cls,user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return {"msg": "User not found"},404
+        user.delete_from_db()
+        
+        return {"msg": "user deleted successfully"}
+
 
    
 
