@@ -4,6 +4,7 @@ from model.users import UserModel
 from flask import request
 from flask_jwt_extended import ( create_access_token,
 create_refresh_token,jwt_refresh_token_required,get_jwt_identity)
+from blacklist import black
 
 class userregister(Resource):
     def post(self):
@@ -58,6 +59,16 @@ class userlogin(Resource):
             },200
         
         return {"msg": "wrong creds"},401
+    
+class logoutuser(Resource):
+    @jwt_required
+    def post(self):
+        jti = get_raw_jwt()["jti"]
+        black.add(jti)
+
+        return {
+            "msg": "Successfully logged out user"
+        }
 
 class tokenrefresh(Resource):
     @jwt_refresh_token_required

@@ -4,9 +4,10 @@ from flask_jwt_extended import JWTManager
 import bcrypt
 
 from security import auth,identity
-from resource.users import userregister,usermethods,userlogin,tokenrefresh
+from resource.users import userregister,usermethods,userlogin,tokenrefresh,logoutuser
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
+from blacklist import black
 
 app = Flask(__name__)
 app.secret_key="pinku"
@@ -18,6 +19,8 @@ app.config["SECRET_KEY"]= "diptochuck"
 app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///site.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
 app.config["PROPAGATE_EXCEPTIONS"]= True
+app.config["JWT_BLACKLIST_ENABLED"] = True
+app.config["JWT_BLACKLIST_TOKEN_CHECKS"]=["access","refresh"]
 
 @app.before_first_request
 def create_tables():
@@ -34,6 +37,10 @@ def add_claims(identity):
     return {
         "is_admin": False
     }
+
+@jwt.token_in_blacklist_loader
+def check_if_token_blacklist(decrypted_token):
+    return decrypted_token["jti"] in black
 
 @jwt.expired_token_loader
 def expired_token_callback():
@@ -73,13 +80,14 @@ def revoked_token():
 
 
 api.add_resource(Item,"/item")
-api.add_resource(ItemList,"/items_show")
+api.add_resource(ItemList,"/itemsall")
 api.add_resource(userregister,"/register")
 api.add_resource(Store,"/store")
 api.add_resource(StoreList,"/storesall")
 api.add_resource(usermethods,"/user/<int:user_id>")
 api.add_resource(userlogin,"/auth")
 api.add_resource(tokenrefresh,"/refresh")
+api.add_resource(logoutuser,"/logout")
 
 
 if __name__ == "__main__":
