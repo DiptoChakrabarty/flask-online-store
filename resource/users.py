@@ -2,7 +2,8 @@ from flask_restful import Resource,reqparse
 import bcrypt
 from model.users import UserModel
 from flask import request
-from flask_jwt_extended import create_access_token,refresh_access_token
+from flask_jwt_extended import (create_access_token,
+refresh_access_token,jwt_refresh_token_required,get_jwt_identity)
 
 class userregister(Resource):
     def post(self):
@@ -57,6 +58,15 @@ class userlogin(Resource):
             },200
         
         return {"msg: "wrong creds"},401
+
+class tokenrefresh(Resource):
+    @jwt_refresh_token_required
+    def post(self):
+        current_user = get_jwt_identity()
+        new_token = create_access_token(identity=current_user,fresh=False)
+        return {
+            "access_token": new_token
+        }
    
 
 

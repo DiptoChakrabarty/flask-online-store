@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 import bcrypt
 
 from security import auth,identity
-from resource.users import userregister,usermethods,userlogin
+from resource.users import userregister,usermethods,userlogin,tokenrefresh
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 
@@ -42,6 +42,7 @@ api.add_resource(Store,"/store")
 api.add_resource(StoreList,"/storesall")
 api.add_resource(usermethods,"/user/<int:user_id>")
 api.add_resource(userlogin,"/auth")
+api.add_resource(tokenrefresh,"/refresh")
 
 
 if __name__ == "__main__":
