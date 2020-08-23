@@ -35,6 +35,35 @@ def add_claims(identity):
         "is_admin": False
     }
 
+@jwt.expired_token_loader
+def expired_token_callback():
+    return jsonify({
+        "description": "The token has expired",
+        "error": "token_expired"
+    }),401
+
+@jwt.invalid_token_loader
+def invalid_token_Callback(error):
+    return jsonify({
+        "description": "Signature Invalid",
+        "error": "invalid_token"
+    }),401
+
+@jwt.unauthorized_loader
+def unaouthorized_token():
+    return jsonify({
+        "description": "jwt token not found",
+        "error": "token_missing"
+    }),401
+
+@jwt.needs_fresh_token_loader
+def fresh_token_loader():
+    return jsonify({
+        "description": "Require fresh token",
+        "error": "fresh_token_required"
+    }),401
+
+
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/items_show")
 api.add_resource(userregister,"/register")

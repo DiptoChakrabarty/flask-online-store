@@ -1,6 +1,10 @@
 
 from flask_restful import Resource,reqparse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import ( jwt_required,
+    get_jwt_claims,
+    jwt_optional,
+    get_jwt_identity,
+    fresh_jwt_required)
 from model.item import ItemModel
 
 class Item(Resource):
@@ -47,6 +51,7 @@ class Item(Resource):
             return {"msg": "Error occured"}
         return item.json() , 201
     
+    @fresh_jwt_required
     def delete(self):
         data = Item.parser.parse_args()
         name = data["name"]
