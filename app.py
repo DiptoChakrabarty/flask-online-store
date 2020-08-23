@@ -50,7 +50,7 @@ def invalid_token_Callback(error):
     }),401
 
 @jwt.unauthorized_loader
-def unaouthorized_token():
+def unaouthorized_token(error):
     return jsonify({
         "description": "jwt token not found",
         "error": "token_missing"
@@ -62,6 +62,14 @@ def fresh_token_loader():
         "description": "Require fresh token",
         "error": "fresh_token_required"
     }),401
+
+@jwt.revoked_token_loader
+def revoked_token():
+    return jsonify({
+        "description": "Token has been revoked",
+        "error": "token_revoked"
+    }),401
+
 
 
 api.add_resource(Item,"/item")

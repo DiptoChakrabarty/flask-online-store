@@ -37,6 +37,7 @@ class UserModel(db.Model):
     @classmethod
     def check_password(cls,username,password):
         user=cls.query.filter_by(username=username).first()
+        password = password.encode('utf-8')
         if user and bcrypt.checkpw(password,user.password):
             return True
         else:

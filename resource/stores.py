@@ -42,6 +42,6 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return  {'stores': [x.json for x in StoreModel.find_all()]}
+        return  {'stores': [x.json for x in StoreModel.find_all() ]}
 
 
