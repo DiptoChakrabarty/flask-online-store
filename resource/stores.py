@@ -2,6 +2,7 @@ from flask_restful import Resource
 from model.store import StoreModel
 from flask import request
 
+
 class Store(Resource):
     def get(self):
         data=request.get_json()
