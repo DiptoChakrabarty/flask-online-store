@@ -5,10 +5,17 @@ from flask import request
 from flask_jwt_extended import ( create_access_token,
 create_refresh_token,jwt_refresh_token_required,get_jwt_identity)
 from blacklist import black
+from schemas.users import UserSchema
+from marshmallow import ValidationError
+
+user_schema = UserSchema()
 
 class userregister(Resource):
     def post(self):
-        data = request.get_json()
+        try:
+            data = user_schema.load(request.get_json())
+        except ValidationError as err:
+            return err.messages,400
         username = data["username"]
         passwd = data["password"]
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
@@ -30,7 +37,7 @@ class usermethods(Resource):
         if not user:
             return {"msg": "User not found"},404
         
-        return user.json
+        return user_schema.dump(user),200
     
     @classmethod
     def get(cls,user_id):
@@ -43,7 +50,10 @@ class usermethods(Resource):
 
 class userlogin(Resource):
     def post(self):
-        data=request.get_json()
+        try:
+            data = user_schema.load(request.get_json())
+        except ValidationError as err:
+            return err.messages,400
         username = data["username"]
         password = data["password"]
 
