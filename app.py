@@ -9,6 +9,10 @@ from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 from blacklist import black
 
+
+
+from marsh import ma
+
 app = Flask(__name__)
 app.secret_key="pinku"
 api=Api(app)
@@ -92,5 +96,6 @@ api.add_resource(logoutuser,"/logout")
 
 if __name__ == "__main__":
     from db import db
+    ma.init_app(app)
     db.init_app(app)
     app.run(debug=True,host="0.0.0.0")
