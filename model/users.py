@@ -1,5 +1,8 @@
 from db import db
 import bcrypt
+from typing import Dict,List,Union
+
+UserJson = Dict[str,Union[int,str]]
 
 
 class UserModel(db.Model):
@@ -20,7 +23,7 @@ class UserModel(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def json(self):
+    def json(self) -> UserJson:
         return {
             "id": self.id,
             "username": self.username
