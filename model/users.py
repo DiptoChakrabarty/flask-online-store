@@ -11,9 +11,6 @@ class UserModel(db.Model):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(20),nullable=False)
 
-    def __init__(self,username,password):
-        self.username = username
-        self.password = password
     
     def save_to_db(self):
         db.session.add(self)

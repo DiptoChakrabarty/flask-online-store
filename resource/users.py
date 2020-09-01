@@ -16,8 +16,8 @@ class userregister(Resource):
             data = user_schema.load(request.get_json())
         except ValidationError as err:
             return err.messages,400
-        username = data["username"]
-        passwd = data["password"]
+        username = data.username
+        passwd = data.password
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
 
         if UserModel.find_by_username(username):
@@ -54,8 +54,8 @@ class userlogin(Resource):
             data = user_schema.load(request.get_json())
         except ValidationError as err:
             return err.messages,400
-        username = data["username"]
-        password = data["password"]
+        username = data.username
+        password = data.password
 
         user = UserModel.find_by_username(username)
 
