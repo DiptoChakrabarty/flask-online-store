@@ -11,7 +11,7 @@ from marshmallow import ValidationError
 from schemas.items import ItemSchema
 
 item_schmea = ItemSchema()
-item_list_schema = ItemModel(many=True)
+item_list_schema = ItemSchema(many=True)
 
 class Item(Resource):
     
@@ -49,7 +49,7 @@ class Item(Resource):
     
     @fresh_jwt_required
     def delete(self):
-       try:
+        try:
             item = item_schema.load(request.get_json())
         except ValidationError as err:
             return err.messages,400

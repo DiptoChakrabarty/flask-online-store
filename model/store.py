@@ -1,7 +1,7 @@
 from db import db
 from model.item import ItemJson
 
-StoreJson =  Dict[str,Union[int,str,List[ItemJson]]]
+
 
 
 class StoreModel(db.Model):

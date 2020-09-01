@@ -1,9 +1,9 @@
 from marsh import ma
 from model.item import ItemModel
-from model.stores import StoreModel
+from model.store import StoreModel
 
 
-class ItemSchema(ma.ModelSchema):
+class ItemSchema(ma.Schema):
     class Meta:
         model = ItemModel
         load_only = ("store",)

@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from model.store import StoreModel
 from flask import request
-from schemas import StoreSchema
+from schemas.stores import StoreSchema
 
 store_schema = StoreSchema()
 store_list_schema = StoreSchema(many=True)

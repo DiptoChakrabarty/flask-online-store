@@ -1,7 +1,7 @@
 from marsh import ma
 from model.users import UserModel
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.Schema):
     class Meta:
         model = UserModel
         load_only = ("password",)
