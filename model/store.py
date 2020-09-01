@@ -1,6 +1,4 @@
 from db import db
-import bcrypt
-from typing import Dict,List,Union
 from model.item import ItemJson
 
 StoreJson =  Dict[str,Union[int,str,List[ItemJson]]]

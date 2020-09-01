@@ -1,7 +1,10 @@
 from flask_restful import Resource
 from model.store import StoreModel
 from flask import request
+from schemas import StoreSchema
 
+store_schema = StoreSchema()
+store_list_schema = StoreSchema(many=True)
 
 class Store(Resource):
     def get(self):
@@ -21,7 +24,7 @@ class Store(Resource):
         if store:
             return {"msg": "Store exists already"},400
         
-        store = StoreModel(name)
+        store = StoreModel(name=name)
         try:
             store.save_to_db()
         except:
@@ -43,6 +46,6 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return  {'stores': [x.json for x in StoreModel.find_all() ]}
+        return  {'stores': store_list_schema(StoreModel.find_all())}
 
 

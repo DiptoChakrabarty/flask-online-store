@@ -9,7 +9,7 @@ from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 from blacklist import black
 
-
+from marshmallow import ValidationError
 
 from marsh import ma
 
@@ -26,11 +26,21 @@ app.config["PROPAGATE_EXCEPTIONS"]= True
 app.config["JWT_BLACKLIST_ENABLED"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"]=["access","refresh"]
 
+
+
+
 @app.before_first_request
 def create_tables():
     db.create_all()
     
 jwt=JWTManager(app)
+
+
+@app.errorhandler(ValidationError)
+def handle_marshmallow_validation(err):
+    return jsonify(err.messages),400
+
+
 
 @jwt.user_claims_loader
 def add_claims(identity):
