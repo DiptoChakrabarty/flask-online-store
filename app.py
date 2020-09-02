@@ -9,7 +9,7 @@ from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 from blacklist import black
 
-from marshmallow import ValidationError
+#from marshmallow import ValidationError
 
 from marsh import ma
 
@@ -36,9 +36,9 @@ def create_tables():
 jwt=JWTManager(app)
 
 
-@app.errorhandler(ValidationError)
+'''@app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
-    return jsonify(err.messages),400
+    return jsonify(err.messages),400'''
 
 
 
