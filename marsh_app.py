@@ -8,26 +8,28 @@ db=SQLAlchemy(app)
 ma = Marshmallow(app)
 
 
-class marsh(db.Model):
+class Marsh(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(10))
+    rewards = db.relationship("Reward")
 
-class reward(db.Model):
+class Reward(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     reward_name = db.Column(db.String(10))
-    user_id = db.Column(db.Integer,db.ForeignKey("marsh.id"))
-    marsh = db.relationship("marsh",backref='rewards')
+    marsh_id = db.Column(db.Integer,db.ForeignKey("marsh.id"))
+    marsh = db.relationship("Marsh",backref='reward')
 
 class MarshSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = marsh
+        model = Marsh
         load_instance = True
-        include_fk = True
+        
 
 class RewardSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
-        model = reward
+        model = Reward
         load_instance = True
+        
 
 
 
@@ -38,27 +40,47 @@ def create_tables():
 
 @app.route("/")
 def home():
-    one = marsh(name="one")
-    two = marsh(name="two")
+    one = Marsh(name="one")
+    two = Marsh(name="two")
     db.session.add(one)
     db.session.add(two)
     db.session.commit()
-    first = reward(reward_name="reward1",marsh=one)
-    second = reward(reward_name="reward2",marsh=one)
-    third = reward(reward_name="reward3",marsh=two)
+    first = Reward(reward_name="reward1",marsh=one)
+    second = Reward(reward_name="reward2",marsh=one)
+    third = Reward(reward_name="reward3",marsh=two)
     db.session.add(first)
     db.session.add(second)
     db.session.add(second)
-    db.session.commit 
-    users = marsh.query.first() 
+    db.session.commit ()
+    users = Marsh.query.first() 
     print(users)
+    rewards = Reward.query.all()
+    print(rewards)
     return jsonify({"msg": "added to database"})
 
 @app.route("/check")
 def index():
-    users = marsh.query.first()
+    users = Marsh.query.first()
     print(users)
     marsh_schema =  MarshSchema()
+    output = marsh_schema.dump(users)
+    print(output)
+    return jsonify({"user": output})
+
+@app.route("/res")
+def rewards():
+    rewards = Reward.query.first()
+    print(rewards)
+    schema =  RewardSchema()
+    output = schema.dump(rewards)
+    print(output)
+    return jsonify({"user": output})
+
+@app.route("/checkall")
+def index_all():
+    users = Marsh.query.all()
+    print(users)
+    marsh_schema =  MarshSchema(many=True)
     output = marsh_schema.dump(users)
     print(output)
     return jsonify({"user": output})
