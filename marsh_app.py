@@ -67,6 +67,19 @@ def index():
     print(output)
     return jsonify({"user": output})
 
+@app.route("/user")
+def load():
+    users = Marsh.query.first()
+    print(users)
+    marsh_schema =  MarshSchema()
+    output = marsh_schema.dump(users)
+    print(output)
+    data = marsh_schema.load(output)
+    print(data)
+    print(data.name)
+
+    return jsonify({"user": output})
+
 @app.route("/res")
 def rewards():
     rewards = Reward.query.all()
