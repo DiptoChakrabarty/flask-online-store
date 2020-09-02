@@ -11,18 +11,18 @@ ma = Marshmallow(app)
 class Marsh(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(10))
-    rewards = db.relationship("Reward")
+    rewards = db.relationship("Reward",backref="reward_marsh")
 
 class Reward(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     reward_name = db.Column(db.String(10))
     marsh_id = db.Column(db.Integer,db.ForeignKey("marsh.id"))
-    marsh = db.relationship("Marsh",backref='reward')
-
+    
 class MarshSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Marsh
         load_instance = True
+        include_fk = True
         
 
 class RewardSchema(ma.SQLAlchemyAutoSchema):
@@ -45,14 +45,14 @@ def home():
     db.session.add(one)
     db.session.add(two)
     db.session.commit()
-    first = Reward(reward_name="reward1",marsh=one)
-    second = Reward(reward_name="reward2",marsh=one)
-    third = Reward(reward_name="reward3",marsh=two)
+    first = Reward(reward_name="reward1",reward_marsh=one)
+    second = Reward(reward_name="reward2",reward_marsh=one)
+    third = Reward(reward_name="reward3",reward_marsh=two)
     db.session.add(first)
     db.session.add(second)
-    db.session.add(second)
+    db.session.add(third)
     db.session.commit ()
-    users = Marsh.query.first() 
+    users = Marsh.query.all() 
     print(users)
     rewards = Reward.query.all()
     print(rewards)
@@ -69,9 +69,9 @@ def index():
 
 @app.route("/res")
 def rewards():
-    rewards = Reward.query.first()
+    rewards = Reward.query.all()
     print(rewards)
-    schema =  RewardSchema()
+    schema =  RewardSchema(many=True)
     output = schema.dump(rewards)
     print(output)
     return jsonify({"user": output})
