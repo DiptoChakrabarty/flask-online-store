@@ -18,16 +18,16 @@ class Reward(db.Model):
     reward_name = db.Column(db.String(10))
     marsh_id = db.Column(db.Integer,db.ForeignKey("marsh.id"))
     
-class MarshSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Marsh
-        load_instance = True
-        include_fk = True
-        
 
 class RewardSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Reward
+        load_instance = True
+
+class MarshSchema(ma.SQLAlchemyAutoSchema):
+    rewards = ma.Nested(RewardSchema,many=True)
+    class Meta:
+        model = Marsh
         load_instance = True
         
 
