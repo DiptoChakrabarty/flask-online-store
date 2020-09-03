@@ -10,7 +10,7 @@ from model.item import ItemModel
 from marshmallow import ValidationError
 from schemas.items import ItemSchema
 
-item_schmea = ItemSchema()
+item_schema = ItemSchema()
 item_list_schema = ItemSchema(many=True)
 
 class Item(Resource):
@@ -18,14 +18,15 @@ class Item(Resource):
     def get(self):
         try:
             data = item_schema.load(request.get_json())
+            print(data.name)
         except ValidationError as err:
             return err.messages,400
-        #print(data)
+        print(data)
         name = data.name
         item = ItemModel.find_by_name(name)
 
         if item:
-            return item_schmea.dump(item)
+            return item_schema.dump(item)
         return {
             "msg": "Item not found"
         }

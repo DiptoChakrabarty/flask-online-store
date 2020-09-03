@@ -11,7 +11,7 @@ class ItemModel(db.Model):
     name= db.Column(db.String(50),unique=True,nullable=False)
     price =  db.Column(db.Float(precision=2),nullable=False)
 
-    store_id = db.Column(db.Integer,db.ForeignKey('stores.id'))
+    store_id = db.Column(db.Integer,db.ForeignKey('stores.id'),nullable=False)
     store = db.relationship("StoreModel")
 
     @classmethod

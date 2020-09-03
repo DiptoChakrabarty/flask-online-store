@@ -18,6 +18,7 @@ class userregister(Resource):
             return err.messages,400
         username = data.username
         passwd = data.password
+        print(username,passwd)
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
 
         if UserModel.find_by_username(username):
