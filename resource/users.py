@@ -1,7 +1,7 @@
 from flask_restful import Resource,reqparse
 import bcrypt
 from model.users import UserModel
-from flask import request
+from flask import request,make_response,render_template
 from flask_jwt_extended import ( create_access_token,
 create_refresh_token,jwt_refresh_token_required,get_jwt_identity,jwt_required)
 from blacklist import black
@@ -101,7 +101,7 @@ class UserConfirm(Resource):
         if user_find.find_by_username(user_find.username):
             user_find.activated = True
             user_find.save_to_db()
-            return {"msg": "User has been activated"},200
+            return make_response(render_template("confirm.html",email=user_find.username))
         return {"msg": "User not found"},404
 
 

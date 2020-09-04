@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Confirmation</title>
+    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container-fluid">
+    <div class="jumbotron text-center full-height">
+      <h1>Thank You</h1>
+      <p><em>Your registration has been confirmed through < {{ email }} >.</em></p>
+    </div>
+
+    <footer class="text-center">
+      <hr>
+      <p><a href="https://youtube.com/" target="_blank">YouTube</a></p>
+    </footer>
+  </div>
+
+</body>
+</html>
