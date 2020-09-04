@@ -94,8 +94,9 @@ class tokenrefresh(Resource):
    
 class UserConfirm(Resource):
     def get(self):
-        data = request.get_json*()
-        user_find = user_schema.load(data)
+        data = request.get_json()
+        user_find = UserModel.find_by_username(data["username"])
+        print(user_find.username,user_find.activated)
 
         if user_find.find_by_username(user_find.username):
             user_find.activated = True
