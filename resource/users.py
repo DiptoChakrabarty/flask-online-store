@@ -18,14 +18,20 @@ class userregister(Resource):
             return err.messages,400
         username = data.username
         passwd = data.password
+        email = data.email
         print(username,passwd)
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
 
         if UserModel.find_by_username(username):
             return {"msg": "user with username exists"}
         
+        if UserModel.find_by_email(email):
+            return {"msg": "user with email id  exists"} 
+        
         user = UserModel(username,hashed)
         user.save_to_db()
+
+        user.send_mail()
 
         return {
             "msg": "user saved successfully"
@@ -93,15 +99,17 @@ class tokenrefresh(Resource):
         }
    
 class UserConfirm(Resource):
-    def get(self):
-        data = request.get_json()
-        user_find = UserModel.find_by_username(data["username"])
+    def get(self,name):
+        #data = request.get_json()
+        user_find = UserModel.find_by_username(name)
         print(user_find.username,user_find.activated)
 
         if user_find.find_by_username(user_find.username):
             user_find.activated = True
             user_find.save_to_db()
-            return make_response(render_template("confirm.html",email=user_find.username))
+            headers={"Content-Type": "text/html"}
+            return make_response(render_template("confirm.html",email=user_find.username),200
+            ,headers)
         return {"msg": "User not found"},404
 
 
