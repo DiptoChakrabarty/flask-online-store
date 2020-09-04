@@ -61,13 +61,15 @@ class userlogin(Resource):
         user = UserModel.find_by_username(username)
 
         if user and UserModel.check_password(username,password):
-            access_token = create_access_token(identity=user.id,fresh=True)
-            refresh_token = create_refresh_token(user.id)
+            if user.activated:
+                access_token = create_access_token(identity=user.id,fresh=True)
+                refresh_token = create_refresh_token(user.id)
 
-            return {
-                "access_token": access_token,
-                "refresh_token": refresh_token
-            },200
+                return {
+                    "access_token": access_token,
+                    "refresh_token": refresh_token
+                },200
+            return {"msg": "User has not yet been activated"},401
         
         return {"msg": "wrong creds"},401
     
@@ -90,7 +92,16 @@ class tokenrefresh(Resource):
             "access_token": new_token
         }
    
+class UserConfirm(Resource):
+    def get(self):
+        data = request.get_json*()
+        user_find = user_schema.load(data)
 
+        if user_find.find_by_username(user_find.username):
+            user_find.activated = True
+            user_find.save_to_db()
+            return {"msg": "User has been activated"},200
+        return {"msg": "User not found"},404
 
 
 
