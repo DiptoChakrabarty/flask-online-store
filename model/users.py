@@ -3,6 +3,7 @@ import bcrypt
 from typing import Dict,List,Union
 from flask import request,url_for
 import requests
+from libs import MailGun
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
@@ -33,7 +34,14 @@ class UserModel(db.Model):
         db.session.commit()
     
     def send_mail(self):
+        
         link = request.url_root[:-1] + url_for("userconfirm",user_id=self.username)
+        subject= "Registration confirmation"
+        text= f"Please click the link to confirm : {link}"
+        html = f"<html>Please click the link to confirm : <a href="{link}">{link}</a></html>"
+
+        MailGun.send_mail([self.email],subject,text,html)
+
         requests.post(
             f"http://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages",
             auth=("api",MAILGUN_API_KEY),
