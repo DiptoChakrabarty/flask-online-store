@@ -1,8 +1,8 @@
 import os
-from flask import Flask ,request,jsonify
+from flask import Flask ,request,jsonify,url_for
 from flask_mail import Mail,Message
 from flask_sqlalchemy import SQLAlchemy 
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 app= Flask(__name__)
 
@@ -51,7 +51,7 @@ def create_tables():
 def send():
     msg =  Message("Hey There",recipients=["user@gmail.com"])
     msg.body = "This is a sample email for default users"
-    msg.html = "<br>Adding HTML to your email</br>"
+    #msg.html = "<br>Adding HTML to your email</br>"
     mail.send(msg)
 
     return f"Mail Sent Successfully"
@@ -70,7 +70,7 @@ def register():
     return jsonify({ "msg": "Added User" , "status":200})
 
 @app.route("/token",methods=["POST"])
-def token_verify():
+def token_create():
     data = request.get_json()
     name=data["name"]
     email = data["email"]
@@ -78,11 +78,22 @@ def token_verify():
     if Users.find_by_name(name):
         tok = tokens(email)
 
+        msg= Message("Confirm Email",recipients=[email])
+        link = url_for("token_verify",token=tok,external=True)
+        msg.body = "Verify email address by clicking here {}".format(link)
+        mail.send(msg)
+
+
         return jsonify({"msg": "your token is {}".format(tok)})
+    return jsonify({"msg": "Invalid user"})
 
-
-
-
+@app.route("/confirm/<token>",methods=["POST"])
+def token_verify(token):
+    try:
+        email = serializer.loads(token,salt="flask-email-confirm",max_age=60)
+    except SignatureExpired:
+        return "<h1>Token is expired</h1>"
+    return "<h1>Token Verified</h1>"
 
 if __name__ =="__main__":
     app.run(debug=True)
