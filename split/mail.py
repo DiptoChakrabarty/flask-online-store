@@ -18,3 +18,14 @@ app.config["MAIL_ASCII_ATTACHMENTS"] =  False
 
 
 mail = Mail(app)
+
+
+@app.route("/send")
+def send():
+    msg =  Message("Hey There",recipients=["user@gmail.com"])
+    mail.send(msg)
+
+    return f"Mail Sent Successfully"
+
+if __name__ =="__main__":
+    app.run(debug=True)
