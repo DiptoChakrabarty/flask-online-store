@@ -38,7 +38,7 @@ class UserModel(db.Model):
         link = request.url_root[:-1] + url_for("userconfirm",user_id=self.username)
         subject= "Registration confirmation"
         text= f"Please click the link to confirm : {link}"
-        html = f"<html>Please click the link to confirm : <a href="{link}">{link}</a></html>"
+        html = f'<html>Please click the link to confirm : <a href="{link}">{link}</a></html>'
 
         MailGun.send_mail([self.email],subject,text,html)
 

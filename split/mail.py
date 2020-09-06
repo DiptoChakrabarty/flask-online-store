@@ -79,7 +79,7 @@ def token_create():
         tok = tokens(email)
 
         msg= Message("Confirm Email",recipients=[email])
-        link = url_for("token_verify",token=tok,external=True)
+        link = url_for("token_verify",token=tok,_external=True)
         msg.body = "Verify email address by clicking here {}".format(link)
         mail.send(msg)
 
@@ -87,10 +87,10 @@ def token_create():
         return jsonify({"msg": "your token is {}".format(tok)})
     return jsonify({"msg": "Invalid user"})
 
-@app.route("/confirm/<token>",methods=["POST"])
+@app.route("/confirm/<token>")
 def token_verify(token):
     try:
-        email = serializer.loads(token,salt="flask-email-confirm",max_age=60)
+        email = serializer.loads(token,salt="flask-email-confirmation",max_age=60)
     except SignatureExpired:
         return "<h1>Token is expired</h1>"
     return "<h1>Token Verified</h1>"
