@@ -37,8 +37,9 @@ class Users(db.Model):
 
 
 def tokens(email):
-    token = serializer.dumps(email,salt="flask-email-confirmation")
-    return token 
+    serializer = URLSafeTimedSerializer("secrettoken",1800)
+    token = serializer.dumps({"email": email},salt="flask-email-confirmation")
+    return token
 
 
 
@@ -77,6 +78,7 @@ def token_create():
 
     if Users.find_by_name(name):
         tok = tokens(email)
+        print(tok)
 
         msg= Message("Confirm Email",recipients=[email])
         link = url_for("token_verify",token=tok,_external=True)
@@ -90,7 +92,9 @@ def token_create():
 @app.route("/confirm/<token>")
 def token_verify(token):
     try:
-        email = serializer.loads(token,salt="flask-email-confirmation",max_age=60)
+        serializer = URLSafeTimedSerializer("secrettoken")
+        email = serializer.loads(token,salt="flask-email-confirmation")["email"]
+        print(email)   
     except SignatureExpired:
         return "<h1>Token is expired</h1>"
     return "<h1>Token Verified</h1>"
