@@ -1,18 +1,18 @@
-from flask_restful import Resource,reqparse
+from flask_restful import Resource,reqparse,current_app
 import bcrypt
 from model.users import UserModel
-from flask import request,make_response,render_template
+from flask import request,make_response,render_template,jsonify
 from flask_jwt_extended import ( create_access_token,
 create_refresh_token,jwt_refresh_token_required,get_jwt_identity,jwt_required)
 from blacklist import black
 from schemas.users import UserSchema
 from marshmallow import ValidationError
 from mail import mail 
-from flask-mail import Message
+from flask_mail import Message
 
 user_schema = UserSchema()
 
-class userregister(Resource):
+class UserRegister(Resource):
     def post(self):
         try:
             data = user_schema.load(request.get_json())
@@ -34,7 +34,7 @@ class userregister(Resource):
         user = UserModel(username,hashed,email)
         user.save_to_db()
 
-        user.send_mail()
+        
 
         return {
             "msg": "user saved successfully"
@@ -107,8 +107,11 @@ class UserConfirm(Resource):
         try:
             serializer = URLSafeTimedSerializer("secrettoken")
             email = serializer.loads(token,salt="flask-email-confirmation")["email"]
-            if not UserModel.find_by_email(email):
+            user = UserModel.find_by_email(email)
+            if not user:
                 return "<h1>Invalid User</h1>"
+            user.activated = True 
+            user.save_to_db()
 
         except SignatureExpired:
             return "<h1>Token is expired</h1>"
@@ -122,17 +125,17 @@ class UserConfirm(Resource):
         username = data.username
         email = data.email
 
-        if UserModel.find_by_username(name) and UserModel.find_by_email(email):
-            tok = UserModel.generate_token(email)
+        if UserModel.find_by_username(username) and UserModel.find_by_email(email):
+            tok = data.generate_token()
 
             msg= Message("Confirm Email",recipients=[email])
-            link = url_for("token_verify",token=tok,_external=True)
+            #link = api.url_for(api(current_app),UserConfirm,token=tok,_external=True)
+            link = "http://localhost:5000/confirm/{}".format(tok)
             msg.body = "Verify email address by clicking here {}".format(link)
             mail.send(msg)
 
-
-        return jsonify({"msg": "your token is {}".format(tok)})
-    return jsonify({"msg": "Invalid user"})
+            return jsonify({"msg": "your token is {}".format(tok)})
+        return jsonify({"msg": "Invalid user"})
 
         
 

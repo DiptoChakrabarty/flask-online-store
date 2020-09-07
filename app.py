@@ -1,12 +1,12 @@
 from flask import Flask,jsonify,request
 from flask_restful import Resource,Api,reqparse
 from flask_jwt_extended import JWTManager
-import bcrypt
+import bcrypt,os
 from mail import mail 
-from itsdangerous import URLSafeTimedSerializer,SignatureExpired
+
 
 from security import auth,identity
-from resource.users import userregister,usermethods,userlogin,tokenrefresh,logoutuser,UserConfirm
+from resource.users import UserRegister,usermethods,userlogin,tokenrefresh,logoutuser,UserConfirm
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
 from blacklist import black
@@ -17,7 +17,7 @@ from marsh import ma
 
 app = Flask(__name__)
 app.secret_key="pinku"
-api=Api(app)
+api=Api()
 
 
 
@@ -109,7 +109,7 @@ def revoked_token():
 
 api.add_resource(Item,"/item")
 api.add_resource(ItemList,"/itemsall")
-api.add_resource(userregister,"/register")
+api.add_resource(UserRegister,"/register")
 api.add_resource(Store,"/store")
 api.add_resource(StoreList,"/storesall")
 api.add_resource(usermethods,"/user/<int:user_id>")
@@ -117,10 +117,12 @@ api.add_resource(userlogin,"/auth")
 api.add_resource(tokenrefresh,"/refresh")
 api.add_resource(logoutuser,"/logout")
 api.add_resource(UserConfirm,"/confirm")
+api.add_resource(UserConfirm,"/confirm/<string:token>")
 
 
 if __name__ == "__main__":
     from db import db
+    api.init_app(app)
     ma.init_app(app)
     db.init_app(app)
     mail.init_app(app)

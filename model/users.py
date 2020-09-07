@@ -18,7 +18,7 @@ class UserModel(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(20),nullable=False)
-    email = db.Column(db.String(20),nullable=False,unique=True)
+    email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)
 
     def __init__(self,username,password,email):
@@ -34,27 +34,8 @@ class UserModel(db.Model):
         db.session.delete(self)
         db.session.commit()
     
-    def send_mail(self):
-        
-        link = request.url_root[:-1] + url_for("userconfirm",user_id=self.username)
-        subject= "Registration confirmation"
-        text= f"Please click the link to confirm : {link}"
-        html = f'<html>Please click the link to confirm : <a href="{link}">{link}</a></html>'
-
-        MailGun.send_mail([self.email],subject,text,html)
-
-        requests.post(
-            f"http://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages",
-            auth=("api",MAILGUN_API_KEY),
-            data={
-                "from": f"{FROM_TITLE} <{FROM_EMAIL}>",
-                "to": self.email,
-                "subject": "Registration confirmation",
-                "text": f"Please click the link to confirm : {link}",
-            },
-        )
     
-    def generate_tokens(self):
+    def generate_token(self):
         serializer = URLSafeTimedSerializer("secrettoken",1800)
         token = serializer.dumps({"email":self.email},salt="flask-email-confirmation")
         return token
