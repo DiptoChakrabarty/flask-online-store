@@ -9,6 +9,7 @@ from schemas.users import UserSchema
 from marshmallow import ValidationError
 from mail import mail 
 from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 user_schema = UserSchema()
 
@@ -34,7 +35,7 @@ class UserRegister(Resource):
         user = UserModel(username,hashed,email)
         user.save_to_db()
 
-        
+        user.generate_mail()
 
         return {
             "msg": "user saved successfully"
@@ -113,11 +114,11 @@ class UserConfirm(Resource):
             user.activated = True 
             user.save_to_db()
 
-        except SignatureExpired:
+        except:
             return "<h1>Token is expired</h1>"
         return "<h1>Token Verified</h1>"
     
-    def post(self):
+''' def post(self):
         try:
             data = user_schema.load(request.get_json())
         except ValidationError as err:
@@ -135,7 +136,7 @@ class UserConfirm(Resource):
             mail.send(msg)
 
             return jsonify({"msg": "your token is {}".format(tok)})
-        return jsonify({"msg": "Invalid user"})
+        return jsonify({"msg": "Invalid user"})'''
 
         
 

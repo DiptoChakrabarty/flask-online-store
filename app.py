@@ -116,7 +116,7 @@ api.add_resource(usermethods,"/user/<int:user_id>")
 api.add_resource(userlogin,"/auth")
 api.add_resource(tokenrefresh,"/refresh")
 api.add_resource(logoutuser,"/logout")
-api.add_resource(UserConfirm,"/confirm")
+#api.add_resource(UserConfirm,"/confirm")
 api.add_resource(UserConfirm,"/confirm/<string:token>")
 
 

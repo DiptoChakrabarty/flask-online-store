@@ -4,6 +4,8 @@ from typing import Dict,List,Union
 from flask import request,url_for
 import requests
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
+from mail import mail 
+from flask_mail import Message
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
@@ -35,10 +37,18 @@ class UserModel(db.Model):
         db.session.commit()
     
     
-    def generate_token(self):
+    def generate_mail(self):
         serializer = URLSafeTimedSerializer("secrettoken",1800)
         token = serializer.dumps({"email":self.email},salt="flask-email-confirmation")
-        return token
+        
+        msg= Message("Confirm Email",recipients=[self.email])
+        #link = api.url_for(api(current_app),UserConfirm,token=tok,_external=True)
+        link = "http://localhost:5000/confirm/{}".format(token)
+        msg.body = "Verify email address by clicking here {}".format(link)
+        mail.send(msg)
+
+        
+    
 
 
     @classmethod
