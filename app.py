@@ -2,6 +2,8 @@ from flask import Flask,jsonify,request
 from flask_restful import Resource,Api,reqparse
 from flask_jwt_extended import JWTManager
 import bcrypt
+from mail import mail 
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 from security import auth,identity
 from resource.users import userregister,usermethods,userlogin,tokenrefresh,logoutuser,UserConfirm
@@ -26,6 +28,18 @@ app.config["PROPAGATE_EXCEPTIONS"]= True
 app.config["JWT_BLACKLIST_ENABLED"] = True
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"]=["access","refresh"]
 
+
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] =  587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_DEBUG"] = True
+app.config["MAIL_USERNAME"] = os.environ["MAIL_USERNAME"]
+app.config["MAIL_PASSWORD"] = os.environ["MAIL_PASSWORD"]
+app.config["MAIL_DEFAULT_SENDER"] = ("Dipto from DLDLAB",os.environ["MAIL_USERNAME"])
+app.config["MAIL_MAX_EMAILS"] = None
+app.config["MAIL_SUPRESS_SEND"] = False
+app.config["MAIL_ASCII_ATTACHMENTS"] =  False
 
 
 
@@ -109,4 +123,5 @@ if __name__ == "__main__":
     from db import db
     ma.init_app(app)
     db.init_app(app)
+    mail.init_app(app)
     app.run(debug=True,host="0.0.0.0")

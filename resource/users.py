@@ -7,6 +7,8 @@ create_refresh_token,jwt_refresh_token_required,get_jwt_identity,jwt_required)
 from blacklist import black
 from schemas.users import UserSchema
 from marshmallow import ValidationError
+from mail import mail 
+from flask-mail import Message
 
 user_schema = UserSchema()
 
@@ -19,7 +21,8 @@ class userregister(Resource):
         username = data.username
         passwd = data.password
         email = data.email
-        print(username,passwd)
+
+        print(username,passwd,email)
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
 
         if UserModel.find_by_username(username):
@@ -28,7 +31,7 @@ class userregister(Resource):
         if UserModel.find_by_email(email):
             return {"msg": "user with email id  exists"} 
         
-        user = UserModel(username,hashed)
+        user = UserModel(username,hashed,email)
         user.save_to_db()
 
         user.send_mail()
@@ -62,6 +65,7 @@ class userlogin(Resource):
         except ValidationError as err:
             return err.messages,400
         username = data.username
+        email = data.email
         password = data.password
 
         user = UserModel.find_by_username(username)
@@ -99,18 +103,38 @@ class tokenrefresh(Resource):
         }
    
 class UserConfirm(Resource):
-    def get(self,name):
-        #data = request.get_json()
-        user_find = UserModel.find_by_username(name)
-        print(user_find.username,user_find.activated)
+    def get(self,token):
+        try:
+            serializer = URLSafeTimedSerializer("secrettoken")
+            email = serializer.loads(token,salt="flask-email-confirmation")["email"]
+            if not UserModel.find_by_email(email):
+                return "<h1>Invalid User</h1>"
 
-        if user_find.find_by_username(user_find.username):
-            user_find.activated = True
-            user_find.save_to_db()
-            headers={"Content-Type": "text/html"}
-            return make_response(render_template("confirm.html",email=user_find.username),200
-            ,headers)
-        return {"msg": "User not found"},404
+        except SignatureExpired:
+            return "<h1>Token is expired</h1>"
+        return "<h1>Token Verified</h1>"
+    
+    def post(self):
+        try:
+            data = user_schema.load(request.get_json())
+        except ValidationError as err:
+            return err.messages,400
+        username = data.username
+        email = data.email
+
+        if UserModel.find_by_username(name) and UserModel.find_by_email(email):
+            tok = UserModel.generate_token(email)
+
+            msg= Message("Confirm Email",recipients=[email])
+            link = url_for("token_verify",token=tok,_external=True)
+            msg.body = "Verify email address by clicking here {}".format(link)
+            mail.send(msg)
+
+
+        return jsonify({"msg": "your token is {}".format(tok)})
+    return jsonify({"msg": "Invalid user"})
+
+        
 
 
 

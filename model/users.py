@@ -3,7 +3,7 @@ import bcrypt
 from typing import Dict,List,Union
 from flask import request,url_for
 import requests
-from libs import MailGun
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
@@ -21,9 +21,10 @@ class UserModel(db.Model):
     email = db.Column(db.String(20),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)
 
-    def __init__(self,username,password):
+    def __init__(self,username,password,email):
         self.username=username
         self.password=password
+        self.email = email
     
     def save_to_db(self):
         db.session.add(self)
@@ -52,6 +53,11 @@ class UserModel(db.Model):
                 "text": f"Please click the link to confirm : {link}",
             },
         )
+    
+    def generate_tokens(self):
+        serializer = URLSafeTimedSerializer("secrettoken",1800)
+        token = serializer.dumps({"email":self.email},salt="flask-email-confirmation")
+        return token
 
 
     @classmethod
