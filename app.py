@@ -10,7 +10,7 @@ from security import auth,identity
 from resource.users import UserRegister,usermethods,userlogin,tokenrefresh,logoutuser,UserConfirm
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
-from  resource.image import ImageUpload
+from  resource.image import ImageUpload,Images
 from libs.image_uploader import image_set
 from blacklist import black
 
@@ -123,7 +123,8 @@ api.add_resource(tokenrefresh,"/refresh")
 api.add_resource(logoutuser,"/logout")
 #api.add_resource(UserConfirm,"/confirm")
 #api.add_resource(UserConfirm,"/confirm/<string:token>")    #confirm user method
-api.add_resource(ImageUpload,"/images") 
+api.add_resource(ImageUpload,"/imageupload") 
+api.add_resource(Images,"/image")
 
 
 if __name__ == "__main__":
