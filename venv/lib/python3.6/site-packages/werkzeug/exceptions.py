@@ -58,7 +58,6 @@
     :license: BSD-3-Clause
 """
 import sys
-from datetime import datetime
 
 from ._compat import implements_to_string
 from ._compat import integer_types
@@ -162,7 +161,7 @@ class HTTPException(Exception):
 
     def get_headers(self, environ=None):
         """Get a list of headers."""
-        return [("Content-Type", "text/html; charset=utf-8")]
+        return [("Content-Type", "text/html")]
 
     def get_response(self, environ=None):
         """Get a response object.  If one was passed to the exception
@@ -593,47 +592,14 @@ class PreconditionRequired(HTTPException):
     )
 
 
-class _RetryAfter(HTTPException):
-    """Adds an optional ``retry_after`` parameter which will set the
-    ``Retry-After`` header. May be an :class:`int` number of seconds or
-    a :class:`~datetime.datetime`.
-    """
-
-    def __init__(self, description=None, response=None, retry_after=None):
-        super(_RetryAfter, self).__init__(description, response)
-        self.retry_after = retry_after
-
-    def get_headers(self, environ=None):
-        headers = super(_RetryAfter, self).get_headers(environ)
-
-        if self.retry_after:
-            if isinstance(self.retry_after, datetime):
-                from .http import http_date
-
-                value = http_date(self.retry_after)
-            else:
-                value = str(self.retry_after)
-
-            headers.append(("Retry-After", value))
-
-        return headers
-
-
-class TooManyRequests(_RetryAfter):
+class TooManyRequests(HTTPException):
     """*429* `Too Many Requests`
 
-    The server is limiting the rate at which this user receives
-    responses, and this request exceeds that rate. (The server may use
-    any convenient method to identify users and their request rates).
-    The server may include a "Retry-After" header to indicate how long
-    the user should wait before retrying.
-
-    :param retry_after: If given, set the ``Retry-After`` header to this
-        value. May be an :class:`int` number of seconds or a
-        :class:`~datetime.datetime`.
-
-    .. versionchanged:: 1.0
-        Added ``retry_after`` parameter.
+    The server is limiting the rate at which this user receives responses, and
+    this request exceeds that rate. (The server may use any convenient method
+    to identify users and their request rates). The server may include a
+    "Retry-After" header to indicate how long the user should wait before
+    retrying.
     """
 
     code = 429
@@ -668,9 +634,6 @@ class InternalServerError(HTTPException):
 
     Raise if an internal server error occurred.  This is a good fallback if an
     unknown error occurred in the dispatcher.
-
-    .. versionchanged:: 1.0.0
-        Added the :attr:`original_exception` attribute.
     """
 
     code = 500
@@ -679,15 +642,6 @@ class InternalServerError(HTTPException):
         " complete your request. Either the server is overloaded or"
         " there is an error in the application."
     )
-
-    def __init__(self, description=None, response=None, original_exception=None):
-        #: The original exception that caused this 500 error. Can be
-        #: used by frameworks to provide context when handling
-        #: unexpected errors.
-        self.original_exception = original_exception
-        super(InternalServerError, self).__init__(
-            description=description, response=response
-        )
 
 
 class NotImplemented(HTTPException):
@@ -715,18 +669,10 @@ class BadGateway(HTTPException):
     )
 
 
-class ServiceUnavailable(_RetryAfter):
+class ServiceUnavailable(HTTPException):
     """*503* `Service Unavailable`
 
-    Status code you should return if a service is temporarily
-    unavailable.
-
-    :param retry_after: If given, set the ``Retry-After`` header to this
-        value. May be an :class:`int` number of seconds or a
-        :class:`~datetime.datetime`.
-
-    .. versionchanged:: 1.0
-        Added ``retry_after`` parameter.
+    Status code you should return if a service is temporarily unavailable.
     """
 
     code = 503
@@ -809,13 +755,17 @@ class Aborter(object):
 
 def abort(status, *args, **kwargs):
     """Raises an :py:exc:`HTTPException` for the given status code or WSGI
-    application.
+    application::
 
-    If a status code is given, it will be looked up in the list of
-    exceptions and will raise that exception.  If passed a WSGI application,
-    it will wrap it in a proxy WSGI exception and raise that::
+        abort(404)  # 404 Not Found
+        abort(Response('Hello World'))
 
-       abort(404)  # 404 Not Found
+    Can be passed a WSGI application or a status code.  If a status code is
+    given it's looked up in the list of exceptions and will raise that
+    exception, if passed a WSGI application it will wrap it in a proxy WSGI
+    exception and raise that::
+
+       abort(404)
        abort(Response('Hello World'))
 
     """

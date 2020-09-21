@@ -464,8 +464,8 @@ class Frame(object):
         if os.path.isfile(fn):
             fn = os.path.realpath(fn)
         self.filename = to_unicode(fn, get_filesystem_encoding())
-        self.module = self.globals.get("__name__", self.locals.get("__name__"))
-        self.loader = self.globals.get("__loader__", self.locals.get("__loader__"))
+        self.module = self.globals.get("__name__")
+        self.loader = self.globals.get("__loader__")
         self.code = tb.tb_frame.f_code
 
         # support for paste's traceback extensions
@@ -573,12 +573,13 @@ class Frame(object):
 
         if source is None:
             try:
-                with open(
-                    to_native(self.filename, get_filesystem_encoding()), mode="rb"
-                ) as f:
-                    source = f.read()
+                f = open(to_native(self.filename, get_filesystem_encoding()), mode="rb")
             except IOError:
                 return []
+            try:
+                source = f.read()
+            finally:
+                f.close()
 
         # already unicode?  return right away
         if isinstance(source, text_type):

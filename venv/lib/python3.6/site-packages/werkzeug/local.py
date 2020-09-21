@@ -121,13 +121,14 @@ class LocalStack(object):
     def __release_local__(self):
         self._local.__release_local__()
 
-    @property
-    def __ident_func__(self):
+    def _get__ident_func__(self):
         return self._local.__ident_func__
 
-    @__ident_func__.setter
-    def __ident_func__(self, value):
+    def _set__ident_func__(self, value):
         object.__setattr__(self._local, "__ident_func__", value)
+
+    __ident_func__ = property(_get__ident_func__, _set__ident_func__)
+    del _get__ident_func__, _set__ident_func__
 
     def __call__(self):
         def _lookup():

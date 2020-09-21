@@ -1,6 +1,7 @@
 from flask import Flask,jsonify,request
 from flask_restful import Resource,Api,reqparse
 from flask_jwt_extended import JWTManager
+from flask_uploads import configure_uploads,patch_request_class
 import bcrypt,os
 from mail import mail 
 
@@ -9,6 +10,8 @@ from security import auth,identity
 from resource.users import UserRegister,usermethods,userlogin,tokenrefresh,logoutuser,UserConfirm
 from resource.items import Item,ItemList
 from resource.stores import  Store,StoreList
+from  resource.image import ImageUpload
+from libs.image_uploader import image_set
 from blacklist import black
 
 #from marshmallow import ValidationError
@@ -19,6 +22,7 @@ app = Flask(__name__)
 app.secret_key="pinku"
 api=Api()
 
+app.config["UPLOADED_IMAGES_DEST"] = os.path.join("static","images")
 
 
 app.config["SECRET_KEY"]= "diptochuck"
@@ -34,14 +38,15 @@ app.config["MAIL_PORT"] =  587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
 app.config["MAIL_DEBUG"] = True
-app.config["MAIL_USERNAME"] = os.environ["MAIL_USERNAME"]
-app.config["MAIL_PASSWORD"] = os.environ["MAIL_PASSWORD"]
-app.config["MAIL_DEFAULT_SENDER"] = ("Dipto from DLDLAB",os.environ["MAIL_USERNAME"])
+#app.config["MAIL_USERNAME"] = os.environ["MAIL_USERNAME"]    #uncomment lines
+#app.config["MAIL_PASSWORD"] = os.environ["MAIL_PASSWORD"]
+#app.config["MAIL_DEFAULT_SENDER"] = ("Dipto from DLDLAB",os.environ["MAIL_USERNAME"])
 app.config["MAIL_MAX_EMAILS"] = None
 app.config["MAIL_SUPRESS_SEND"] = False
 app.config["MAIL_ASCII_ATTACHMENTS"] =  False
 
-
+patch_request_class(app,20*1024*1024)
+configure_uploads(app,image_set)
 
 @app.before_first_request
 def create_tables():
@@ -117,7 +122,8 @@ api.add_resource(userlogin,"/auth")
 api.add_resource(tokenrefresh,"/refresh")
 api.add_resource(logoutuser,"/logout")
 #api.add_resource(UserConfirm,"/confirm")
-api.add_resource(UserConfirm,"/confirm/<string:token>")
+#api.add_resource(UserConfirm,"/confirm/<string:token>")    #confirm user method
+api.add_resource(ImageUpload,"/images") 
 
 
 if __name__ == "__main__":

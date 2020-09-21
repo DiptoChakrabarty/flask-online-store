@@ -21,7 +21,7 @@ class UserModel(db.Model):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(20),nullable=False)
     email = db.Column(db.String(40),nullable=False,unique=True)
-    activated = db.Column(db.Boolean,default=False)
+    activated = db.Column(db.Boolean,default=True)    #set default as False
 
     def __init__(self,username,password,email):
         self.username=username

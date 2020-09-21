@@ -1,6 +1,6 @@
 import os,re 
 from typing import Union 
-from werkzeung.datastructures import FileStorage
+from werkzeug.datastructures import FileStorage
 
 from flask_uploads import UploadSet,IMAGES 
 

@@ -35,7 +35,7 @@ class UserRegister(Resource):
         user = UserModel(username,hashed,email)
         user.save_to_db()
 
-        user.generate_mail()
+        #user.generate_mail()     #send emails to new users
 
         return {
             "msg": "user saved successfully"

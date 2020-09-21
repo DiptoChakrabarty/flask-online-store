@@ -17,7 +17,7 @@ class ImageUpload(Resource):
         try:
             image_path = image_uploader.save_images(data["image"],folder-folder)
             basename =  image_uploader.get_basename(image_path)
-            return {"msg": "image uploaded {}".format(basen ame)},201
+            return {"msg": "image uploaded {}".format(basename)},201
         except UploadNotAllowed:
             ext = image_uploader.get_extension(data["image"])
-            return {"msg": "Image format incorrect"}.400
+            return {"msg": "Image format incorrect"},400
