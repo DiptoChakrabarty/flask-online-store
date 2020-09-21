@@ -15,7 +15,7 @@ class ImageUpload(Resource):
         user_id = get_jwt_identity()
         folder = f"user_{user_id}"
         try:
-            image_path = image_uploader.save_images(data["image"],folder-folder)
+            image_path = image_uploader.save_images(data["image"],folder=folder)
             basename =  image_uploader.get_basename(image_path)
             return {"msg": "image uploaded {}".format(basename)},201
         except UploadNotAllowed:
