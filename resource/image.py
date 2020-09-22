@@ -47,3 +47,29 @@ class Images(Resource):
             return {"msg": "Image not found"},404
         except:
             return {"msg": "Image could not be deleted"},400
+
+
+class UserAvatars(Resource):
+    @jwt_required
+    def put(self):
+        data = image_schema.load(request.files)
+        filename = f"user_{get_jwt_identity()}"
+        folder = "avatars"
+        avatar_path = image_uploader.find_image_format(filename,folder)
+        if avatar_path:
+            try:
+                os.remove(avatar_path)
+            except:
+                return {"msg": "image deletion failed"},500
+        try:
+            ext = image_uploader.get_extension(data["image"].filename)
+            avatar = filename + ext
+            avatar_path =  image_uploader.save_images(data["image"],
+            folder=folder,name=avatar)
+            basename = image_uploader.get_basename(avatar_path)
+            return {"msg": "Avatar Added "},200
+        except UploadNotAllowed:
+            ext = image_uploader.get_extension(data["image"].filename)
+            return {"msg": "Extension {} not allowed".format(ext)},400
+
+
