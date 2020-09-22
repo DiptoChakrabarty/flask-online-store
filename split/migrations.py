@@ -1,17 +1,16 @@
 import os
 from flask import Flask ,request,jsonify,url_for
 from flask_sqlalchemy import SQLAlchemy 
-
+from flask_migrate import Migrate 
 
 app= Flask(__name__)
 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data.db"
 db=SQLAlchemy(app)
+mograte = Migrate(app,db)
 
 
-
-mail = Mail(app)
 
 class Users(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -44,12 +43,12 @@ def show_user():
     data=request.get_json()
     username=data["name"]
     
-    user =  db.query.filter_by(name=username).first()
+    user =  Users.query.filter_by(name=username).first()
 
     if user:
         return jsonify({
-            "name": user["name"],
-            "email": user["email"]
+            "name": user.name,
+            "email": user.email
         })
     
     return jsonify({
