@@ -16,6 +16,7 @@ class Users(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name =  db.Column(db.String(20),nullable=False,unique=True)
     email = db.Column(db.String(20),nullable=False,unique=True)
+    petname =  db.Column(db.String(20),nullable=False)
 
     @classmethod
     def find_by_name(cls,name):
@@ -31,8 +32,9 @@ def add_user():
     data=request.get_json()
     username=data["name"]
     email=data["email"]
+    petname = data["petname"]
     
-    user = Users(name=username,email=email)
+    user = Users(name=username,email=email,petname=petname)
     db.session.add(user)
     db.session.commit()
 
