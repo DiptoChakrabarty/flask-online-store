@@ -2,6 +2,12 @@ import os
 from flask import Flask ,request,jsonify,url_for
 from flask_sqlalchemy import SQLAlchemy 
 from flask_migrate import Migrate 
+from dotenv import load_dotenv
+load_dotenv()
+
+client_id = os.getenv("CLIENT_ID")
+client_secret = os.getenv("CILENT_SECRET")
+print(client_id,client_secret)
 
 app= Flask(__name__)
 
