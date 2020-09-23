@@ -15,7 +15,7 @@ mograte = Migrate(app,db)
 class Users(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name =  db.Column(db.String(20),nullable=False,unique=True)
-    email = db.Column(db.String(20),nullable=False)
+    email = db.Column(db.String(20),nullable=False,unique=True)
 
     @classmethod
     def find_by_name(cls,name):
