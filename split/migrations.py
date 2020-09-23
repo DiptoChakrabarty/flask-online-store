@@ -16,7 +16,7 @@ class Users(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name =  db.Column(db.String(20),nullable=False,unique=True)
     email = db.Column(db.String(20),nullable=False,unique=True)
-    petname =  db.Column(db.String(20),nullable=False)
+    petname =  db.Column(db.String(20),nullable=False,server_default="true")
 
     @classmethod
     def find_by_name(cls,name):
