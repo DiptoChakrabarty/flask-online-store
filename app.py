@@ -13,6 +13,7 @@ from resource.stores import  Store,StoreList
 from  resource.image import ImageUpload,Images
 from libs.image_uploader import image_set
 from blacklist import black
+from outh import oauth
 
 #from marshmallow import ValidationError
 
@@ -133,4 +134,5 @@ if __name__ == "__main__":
     ma.init_app(app)
     db.init_app(app)
     mail.init_app(app)
+    oauth.init_app(app)
     app.run(debug=True,host="0.0.0.0")
