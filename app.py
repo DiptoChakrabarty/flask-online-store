@@ -4,6 +4,8 @@ from flask_jwt_extended import JWTManager
 from flask_uploads import configure_uploads,patch_request_class
 import bcrypt,os
 from mail import mail 
+from dotenv import load_dotenv
+load_dotenv()
 
 
 from security import auth,identity
@@ -14,6 +16,7 @@ from  resource.image import ImageUpload,Images
 from libs.image_uploader import image_set
 from blacklist import black
 from outh import oauth
+from resource.github_login import Github
 
 #from marshmallow import ValidationError
 
@@ -126,6 +129,7 @@ api.add_resource(logoutuser,"/logout")
 #api.add_resource(UserConfirm,"/confirm/<string:token>")    #confirm user method
 api.add_resource(ImageUpload,"/imageupload") 
 api.add_resource(Images,"/image")
+api.add_resource(Github,"/login/github")
 
 
 if __name__ == "__main__":
