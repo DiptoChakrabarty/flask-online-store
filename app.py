@@ -130,7 +130,7 @@ api.add_resource(logoutuser,"/logout")
 api.add_resource(ImageUpload,"/imageupload") 
 api.add_resource(Images,"/image")
 api.add_resource(Github,"/login/github")
-api.add_resource(GithubAuthorize,"/login/github/authorized")
+api.add_resource(GithubAuthorize,"/login/github/authorized",endpoint="github.authorize")
 
 
 if __name__ == "__main__":
