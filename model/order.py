@@ -1,11 +1,16 @@
 from db import db
 
 
-items_to_order = db.Table(
-    "items_to_orders",
-    db.Column("item_id",db.Integer,db.ForeignKey("items.id")),
-    db.Column("order_id",db.Integer,db.ForeignKey("orders.id"))
-)
+class ItemsInOrder(db.Model):
+    __tablename__="items_in_order"
+    id= db.Column(db.Integer,primary_key=True)
+    item_id=db.Column("item_id",db.Integer,db.ForeignKey("items.id"))
+    order_id = db.Column("order_id",db.Integer,db.ForeignKey("orders.id"))
+    quantity = db.Column(db.Integer)
+
+    item = db.relationship("ItemModel")
+    order = db.relationship("OrderModel",back_populates="items")
+
 
 class OrderModel(db>Model):
     __tablename__="orders"
@@ -13,7 +18,7 @@ class OrderModel(db>Model):
     id = db>Column(db.Integer,primary_key=True)
     status =  db.Column(db.String(15),nullable=True)
 
-    items = db.relationship("ItemModel",secondary=items_to_order,lazy="dynamic")
+    items = db.relationship("ItemsInOrder",back_populates="items")
 
 
     @classmethod
