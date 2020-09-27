@@ -1,6 +1,7 @@
 from flask_restful import Resource 
 from flask import request
 from model.item  import ItemModel
+from model.order import OrderModel
 
 
 class Order(Resource):
@@ -15,4 +16,8 @@ class Order(Resource):
                 return {"msg": "Item not present {}".format(name)},404
             items.append(name)
         print(items)
+    
+        order = OrderModel(items=items,status="pending")
+        order.save_to_db()
+        
 

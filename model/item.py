@@ -3,6 +3,12 @@ from typing import Dict,List,Union
 
 ItemJson =  Dict[str,Union[int,str,float]]
 
+items_to_order = db.Table(
+    "items_to_orders",
+    db.Column("item_id",db.Integer,db.ForeignKey("items.id")),
+    db.Column("order_id",db.Integer,db.ForeignKey("orders.id"))
+)
+
 
 class ItemModel(db.Model):
     __tablename__="items"
