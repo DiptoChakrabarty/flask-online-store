@@ -17,6 +17,7 @@ from libs.image_uploader import image_set
 from blacklist import black
 from outh import oauth
 from resource.github_login import Github,GithubAuthorize
+from resource.order import Order
 
 #from marshmallow import ValidationError
 
@@ -131,7 +132,7 @@ api.add_resource(ImageUpload,"/imageupload")
 api.add_resource(Images,"/image")
 api.add_resource(Github,"/login/github")
 api.add_resource(GithubAuthorize,"/login/github/authorized",endpoint="github.authorize")
-
+api.add_resource(Order,"/order")
 
 if __name__ == "__main__":
     from db import db

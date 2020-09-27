@@ -46,6 +46,6 @@ class Store(Resource):
 
 class StoreList(Resource):
     def get(self):
-        return  {'stores': store_list_schema(StoreModel.find_all())}
+        return  {'stores': store_list_schema.dump(StoreModel.find_all())}
 
 

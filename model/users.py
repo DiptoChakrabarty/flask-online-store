@@ -23,7 +23,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=True)    #set default as False
 
-    def __init__(self,username,password,email,activated):
+    def __init__(self,username,password,email,activated=True):
         self.username=username
         self.password=password
         self.email = email
