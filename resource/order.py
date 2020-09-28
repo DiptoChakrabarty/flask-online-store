@@ -15,12 +15,13 @@ class Order(Resource):
         items=[]
         item_quantity = Counter(data["items"])
 
-        for name,count in item_quantity.most_commom():
+        for name,count in item_quantity.most_common():
             res = ItemModel.find_by_name(name)
             if not res:
                 return {"msg": "Item not present {}".format(name)},404
-            items.append(ItemsInOrder(name=name,quantity=count))
-        #print(items)
+            items.append(ItemsInOrder(item_id=ItemModel.find_id(name),quantity=count))
+        print(items)
+    
     
         order = OrderModel(items=items,status="pending")
         order.save_to_db()  #save orders to database

@@ -1,5 +1,7 @@
 from db import db
 import stripe
+from dotenv import load_dotenv
+load_dotenv() 
 
 
 CURRENCY="Rs"
@@ -15,13 +17,13 @@ class ItemsInOrder(db.Model):
     order = db.relationship("OrderModel",back_populates="items")
 
 
-class OrderModel(db>Model):
+class OrderModel(db.Model):
     __tablename__="orders"
 
-    id = db>Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
     status =  db.Column(db.String(15),nullable=True)
 
-    items = db.relationship("ItemsInOrder",back_populates="items")
+    items = db.relationship("ItemsInOrder",back_populates="order")
 
 
     @classmethod
@@ -31,6 +33,16 @@ class OrderModel(db>Model):
     @classmethod
     def find_by_id(cls,_id):
         return cls.query.filter_by(id=_id).first()
+    
+    @property
+    def description(self):
+        counts= [f'{data.quantity}x {data.item.name}' for data in self.items]
+        return ",".join(counts)
+    
+    @property
+    def amount(self):
+        total = int(sum([item_data.item.price*item_data.quantity for item_data in self.items])*100)
+        return total
 
     def change_status(self,new_status):
         self.status = new_status
