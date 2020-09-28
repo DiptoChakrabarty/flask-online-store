@@ -2,8 +2,11 @@ from flask_restful import Resource
 from flask import request
 from model.item  import ItemModel
 from model.order import OrderModel,ItemsInOrder
+from schemas.order import OrderSchema
 from collections import Counter
 
+
+order_schema=OrderSchema()
 
 class Order(Resource):
     @classmethod
@@ -20,6 +23,12 @@ class Order(Resource):
         #print(items)
     
         order = OrderModel(items=items,status="pending")
-        order.save_to_db()
+        order.save_to_db()  #save orders to database
+
+        order.set_status("failed")
+        order.request_with_stripe(data["token"]) #send the order details to stripe
+        order.set_status("success")
+
+        return order_schema.dump(order)
 
 

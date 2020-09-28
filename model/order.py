@@ -1,5 +1,8 @@
 from db import db
+import stripe
 
+
+CURRENCY="Rs"
 
 class ItemsInOrder(db.Model):
     __tablename__="items_in_order"
@@ -40,3 +43,13 @@ class OrderModel(db>Model):
     def save_to_db(self):
         db.session.delete(self)
         db.session.commit()
+
+    def request_with_stripe(self,token: str)-> stripe.Charge:
+        stripe.api_key =  os.getenv("API_KEY")
+
+        return stripe.Charge.create(
+            amount=self.amount,
+            currency=CURRENCY,
+            description=self.description,
+            source=token
+        )
