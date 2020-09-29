@@ -1,38 +1,53 @@
 import stripe,os
 from dotenv import load_dotenv
 load_dotenv()  
+from flask import Flask,url_for,render_template
 
+app=Flask(__name__)
 
 stripe.api_key =  os.getenv("STRIPE_API")
-print(stripe.api_key)
+public_key = os.getenv("STRIPE_API_PUBLIC")
 
 
-product = stripe.Product.create(
-  name='T-shirt',
-)
-
-print(product)
-
-
-
-
-price = stripe.Price.create(
+def create_product(name,price):
+  product = stripe.Product.create(
+    name=name,
+  )
+  price = stripe.Price.create(
   product= product["id"],
-  unit_amount=2000,
+  unit_amount=price,
   currency='usd',
 )
+  return product["id"]
 
-# Set your secret key. Remember to switch to your live secret key in production!
-# See your keys here: https://dashboard.stripe.com/account/apikeys
-#stripe.api_key = 'sk_test_51HVJvaHDRl8tTEurQNRYDhVKuwt085thjj0Xw4u7G9CQgHQlRbPn1ywCUot82MVjtBNl9neDwMB4IcCeZwAI8iTj00rSoswdxn'
 
-session = stripe.checkout.Session.create(
-  payment_method_types=['card'],
-  line_items=[{
-    'price': product["id"],
-    'quantity': 1,
-  }],
-  mode='payment',
-  success_url='https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
-  cancel_url='https://example.com/cancel',
+
+
+token=stripe.Token.create(
+  card={
+    "number": "4242424242424242",
+    "exp_month": 9,
+    "exp_year": 2021,
+    "cvc": "314",
+  },
 )
+
+print(token)
+
+
+'''
+@app.route("/")
+def index():
+  session = stripe.checkout.Session.create(
+    payment_method_types=['card'],
+    line_items=[{
+      'price': 10,
+      'quantity': 1,
+    }],
+    mode='payment',
+    success_url=url_for("thanks",_external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url=url_for("index",_external=True),
+  )
+  return render_template("index.html",check_session_id=session["id"],
+      checkout_public_key=stripe.api_key)
+'''
