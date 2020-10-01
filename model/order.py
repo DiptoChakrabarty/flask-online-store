@@ -72,5 +72,14 @@ class OrderModel(db.Model):
             amount=self.amount,
             currency=CURRENCY,
             description=self.description,
-            source=token["id"]
-        )
+            source=token["id"],
+            shipping={
+                'name': "John",
+                'address': {
+                'line1': '510 Townsend St',
+                'postal_code': '98140',
+                'city': 'Kolkata',
+                'state': 'WB',
+                'country': 'India',
+            }
+        })
