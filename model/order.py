@@ -1,10 +1,10 @@
 from db import db
-import stripe
 from dotenv import load_dotenv
 load_dotenv() 
+from stripe_pay import stripe
 
 
-CURRENCY="Rs"
+CURRENCY="usd"
 
 class ItemsInOrder(db.Model):
     __tablename__="items_in_order"
@@ -52,16 +52,25 @@ class OrderModel(db.Model):
         db.session.add(self)
         db.session.commit()
     
-    def save_to_db(self):
+    def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
 
-    def request_with_stripe(self,token: str)-> stripe.Charge:
-        stripe.api_key =  os.getenv("API_KEY")
+    def request_with_stripe(self)-> stripe.Charge:
+        token=stripe.Token.create(
+        card={
+            "number": "4242424242424242",
+            "exp_month": 9,
+            "exp_year": 2021,
+            "cvc": "314",
+            }, )
+        
+        print("The token id is ",token["id"])
+        print("The amount is ",self.amount)
 
         return stripe.Charge.create(
             amount=self.amount,
             currency=CURRENCY,
             description=self.description,
-            source=token
+            source=token["id"]
         )

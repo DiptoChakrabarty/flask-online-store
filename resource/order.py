@@ -8,6 +8,8 @@ from collections import Counter
 
 order_schema=OrderSchema()
 
+
+
 class Order(Resource):
     @classmethod
     def post(cls):
@@ -26,9 +28,10 @@ class Order(Resource):
         order = OrderModel(items=items,status="pending")
         order.save_to_db()  #save orders to database
 
-        order.set_status("failed")
-        order.request_with_stripe(data["token"]) #send the order details to stripe
-        order.set_status("success")
+        order.change_status("failed")
+        order.request_with_stripe() #send the order details to stripe
+        print("Payment Done")
+        order.change_status("success")
 
         return order_schema.dump(order)
 
