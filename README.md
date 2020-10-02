@@ -85,7 +85,7 @@ There are mainly four schemas
 
 ## Functionalities present
 
-* flask_jwt_extended
+1) flask_jwt_extended
   - [Read about it here](https://flask-jwt-extended.readthedocs.io/en/stable/)
 
   - flask jwt extended allows us to generate access and refresh tokens
@@ -101,6 +101,45 @@ There are mainly four schemas
   - For all post and put methods jwt token is required
 
   - Deletion requires a fresh jwt token so might prompt you to sign in again
+
+2) flask marshmallow
+  - [Read about it here](https://flask-marshmallow.readthedocs.io/en/latest/)
+
+  - flask marshmallow allows us to easily seralize and desarlize data 
+
+  - Check marsh_app.py file under split directory which contains simple example of using flask marshmallow
+   ```sh
+        class RewardSchema(ma.SQLAlchemyAutoSchema):
+            class Meta:
+                model = Reward
+                load_instance = True
+
+        class MarshSchema(ma.SQLAlchemyAutoSchema):
+            rewards = ma.Nested(RewardSchema,many=True)
+            class Meta:
+                model = Marsh
+                load_instance = True
+
+   ```
+  - The example used above has been similarly implemented in the project
+
+  - flask marshmallow latest version has syantax  different from previous versions 
+
+  - marshamllow integrates well with SQLAlchemy 
+
+3) flask mail 
+  - [Read about it here](https://pythonhosted.org/Flask-Mail/)
+
+  - flask mail allows us to integrate mailing service with flask easily
+
+  - Check mail.py file under split directory which contains simple example to use flask mail
+  ```sh
+        msg= Message("Confirm Email",recipients=[email])
+        link = url_for("token_verify",token=tok,_external=True)
+        msg.body = "Verify email address by clicking here {}".format(link)
+        mail.send(msg)
+  ```
+  - This is used for user confirmation during signup 
 
 ## Contribution Guidelines  🙂
 
