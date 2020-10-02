@@ -2,6 +2,7 @@ from flask_restful import Resource
 from model.store import StoreModel
 from flask import request
 from schemas.stores import StoreSchema
+from flask_jwt_extended import  jwt_required,fresh_jwt_required
 
 store_schema = StoreSchema()
 store_list_schema = StoreSchema(many=True)
@@ -16,6 +17,7 @@ class Store(Resource):
             return store_schema.dump(store)
         return {"msg": "Store not found"},404
     
+    @jwt_required
     def post(self):
         data=request.get_json()
         name=data["name"]
@@ -31,6 +33,8 @@ class Store(Resource):
             return {"msg": "Error occured"},500
 
         return {"msg": "Added the store"},201
+        
+    @fresh_jwt_required    
     def delete(self):
         data=request.get_json()
         name=data["name"]

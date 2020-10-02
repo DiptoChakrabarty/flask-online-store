@@ -31,7 +31,7 @@ class Item(Resource):
             "msg": "Item not found"
         }
             
-    
+    @jwt_required
     def post(self):
         try:
             item = item_schema.load(request.get_json())

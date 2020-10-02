@@ -83,7 +83,26 @@ There are mainly four schemas
 
 ```
 
-# Contribution Guidelines  🙂
+## Functionalities present
+
+* flask_jwt_extended
+  - [Read about it here](https://flask-jwt-extended.readthedocs.io/en/stable/)
+
+  - flask jwt extended allows us to generate access and refresh tokens
+  ```sh
+        access_token = create_access_token(identity=user.id,fresh=True)
+        refresh_token = create_refresh_token(user.id)
+
+        return {
+            "access_token": access_token,
+            "refresh_token": refresh_token
+        },200
+    ```
+  - For all post and put methods jwt token is required
+
+  - Deletion requires a fresh jwt token so might prompt you to sign in again
+
+## Contribution Guidelines  🙂
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 

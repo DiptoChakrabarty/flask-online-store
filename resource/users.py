@@ -118,25 +118,7 @@ class UserConfirm(Resource):
             return "<h1>Token is expired</h1>"
         return "<h1>Token Verified</h1>"
     
-''' def post(self):
-        try:
-            data = user_schema.load(request.get_json())
-        except ValidationError as err:
-            return err.messages,400
-        username = data.username
-        email = data.email
 
-        if UserModel.find_by_username(username) and UserModel.find_by_email(email):
-            tok = data.generate_token()
-
-            msg= Message("Confirm Email",recipients=[email])
-            #link = api.url_for(api(current_app),UserConfirm,token=tok,_external=True)
-            link = "http://localhost:5000/confirm/{}".format(tok)
-            msg.body = "Verify email address by clicking here {}".format(link)
-            mail.send(msg)
-
-            return jsonify({"msg": "your token is {}".format(tok)})
-        return jsonify({"msg": "Invalid user"})'''
 
         
 
