@@ -1,6 +1,6 @@
 # Flask Online Store
 
-### About the Project
+### About the Project :open_book:
 
 - API built using flask 
 - The api comes with a bunch of functionalities
@@ -9,7 +9,7 @@
 
 
 
-### How to run the project 
+### How to run the project  :horse_racing:
 ```sh
 * Clone the repository 
  git clone https://github.com/DiptoChakrabarty/online-store.git
@@ -46,7 +46,7 @@
 
 ```
 
-## Repository Structure
+## Repository Structure :deciduous_tree:
 
  <img src="images/struct.png">
 
@@ -65,9 +65,10 @@ Based on the directories present
 * Templates conatins html templates
 
 
-## DataBase Architecture
+## DataBase Architecture :desktop_computer:
+```sh
 
-There are mainly three schemas 
+There are mainly four schemas 
 
 * Users - which contains details about the users
 * Store - which contains details about the store
@@ -80,7 +81,7 @@ There are mainly three schemas
 - item and order: many to many 
 
 
-
+```
 
 # Contribution Guidelines  🙂
 
