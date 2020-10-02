@@ -142,6 +142,7 @@ There are mainly four schemas
    <img src="images/oauth.png">
 
    - Populate those values in .env to use github oauth
+  <img src="images/github.png">
 
 ### 4) flask migrate 
    - [Read about it here](https://flask-migrate.readthedocs.io/en/latest/)
@@ -204,8 +205,7 @@ There are mainly four schemas
      The values given here are all sample values 
    ```
 
-   - For Indian payments we have to add address and name 
-
+   - For performing Indian payments we have to provide the following parameters
    ```sh
     stripe.Charge.create(
               amount=self.amount,
