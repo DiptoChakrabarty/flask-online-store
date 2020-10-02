@@ -139,11 +139,35 @@ There are mainly four schemas
 
    - Go to Github -> Settings -> Developer settings -> OAuth Apps and get your own client id and secret
 
-   <img src="images/oauth.png>
+   <img src="images/oauth.png">
 
    - Populate those values in .env to use github oauth
 
-### 4) flask mail 
+### 4) flask migrate 
+   - [Read about it here](https://flask-migrate.readthedocs.io/en/latest/)
+
+   - flask migrate can be used to migrate the database easily 
+
+   - app.py under split folder contains sample code 
+
+   ```sh
+    Command used for migration 
+
+      flask db migrate 
+
+      This does the initial migration and creates the relevant files 
+
+      flask db upgrade 
+
+      This finally upgrades your database
+
+   Command used for downgrade
+
+      flask db downgrade
+    
+  ```
+
+### 5) flask mail 
   - [Read about it here](https://pythonhosted.org/Flask-Mail/)
 
   - flask mail allows us to integrate mailing service with flask easily
@@ -158,6 +182,50 @@ There are mainly four schemas
   ```
   
   - This is used for user confirmation during signup 
+
+### 6) Stripe
+   - [Read about it here](https://stripe.com/docs)
+
+   - Payments using stripe is integrated within the app
+
+   - Create an account in  stripe and generate stripe api keys and add the secret key in .env
+
+   - Test token to make payements is generated using the function 
+
+   ```sh
+
+    token=stripe.Token.create(
+        card={
+            "number": "4242424242424242",
+            "exp_month": 9,
+            "exp_year": 2021,
+            "cvc": "314",
+            }, )
+     The values given here are all sample values 
+   ```
+
+   - For Indian payments we have to add address and name 
+
+   ```sh
+    stripe.Charge.create(
+              amount=self.amount,
+              currency=CURRENCY,
+              description=self.description,
+              source=token["id"],
+              shipping={
+                'name': "John",
+                'address': {
+                'line1': '510 Townsend St',
+                'postal_code': '98140',
+                'city': 'Kolkata',
+                'state': 'WB',
+                'country': 'India',
+            }
+        })
+   ``` 
+
+   - If you check you payments page in stripe dashboard you should receive fake payments
+    <img src="images/pay.png">
 
 ## Contribution Guidelines  🙂
 
