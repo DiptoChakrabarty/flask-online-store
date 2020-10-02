@@ -4,7 +4,7 @@ load_dotenv()
 from stripe_pay import stripe
 
 
-CURRENCY="usd"
+CURRENCY="INR"
 
 class ItemsInOrder(db.Model):
     __tablename__="items_in_order"
