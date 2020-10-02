@@ -1,5 +1,5 @@
 import os 
-from flask import g
+from flask import g  #this can hold variables globally inside the whole app 
 from flask_oauthlib.client import OAuth
 from dotenv import load_dotenv
 load_dotenv()

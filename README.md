@@ -85,7 +85,7 @@ There are mainly four schemas
 
 ## Functionalities present
 
-1) flask_jwt_extended
+### 1) flask_jwt_extended
   - [Read about it here](https://flask-jwt-extended.readthedocs.io/en/stable/)
 
   - flask jwt extended allows us to generate access and refresh tokens
@@ -103,7 +103,7 @@ There are mainly four schemas
 
   - Deletion requires a fresh jwt token so might prompt you to sign in again
 
-2) flask marshmallow
+### 2) flask marshmallow
   - [Read about it here](https://flask-marshmallow.readthedocs.io/en/latest/)
 
   - flask marshmallow allows us to easily seralize and desarlize data 
@@ -130,7 +130,20 @@ There are mainly four schemas
 
   - marshamllow integrates well with SQLAlchemy 
 
-3) flask mail 
+### 3) OAuth2
+   - [Read about it here](https://flask-oauthlib.readthedocs.io/en/latest/client.html)
+
+   - For OAuth we are now using GitHub 
+
+   - The relevant methods are in github_login file in resource directory 
+
+   - Go to Github -> Settings -> Developer settings -> OAuth Apps and get your own client id and secret
+
+   <img src="images/oauth.png>
+
+   - Populate those values in .env to use github oauth
+
+### 4) flask mail 
   - [Read about it here](https://pythonhosted.org/Flask-Mail/)
 
   - flask mail allows us to integrate mailing service with flask easily
