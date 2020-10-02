@@ -4,7 +4,7 @@
 
 - API built using flask 
 - The api comes with a bunch of functionalities
-- The api is being upgraded you can checkout issues here
+- The api is being upgraded you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
 - DataBase is integrated with the api
 
 
