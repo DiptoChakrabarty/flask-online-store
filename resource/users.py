@@ -3,7 +3,7 @@ import bcrypt
 from model.users import UserModel
 from flask import request,make_response,render_template,jsonify
 from flask_jwt_extended import ( create_access_token,
-create_refresh_token,jwt_refresh_token_required,get_jwt_identity,jwt_required)
+create_refresh_token,jwt_refresh_token_required,get_jwt_identity,jwt_required,get_raw_jwt)
 from blacklist import black
 from schemas.users import UserSchema
 from marshmallow import ValidationError

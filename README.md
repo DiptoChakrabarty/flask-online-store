@@ -7,7 +7,7 @@
 - The api comes with a bunch of functionalities
 - The api is being upgraded with more features  you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
 - Different functionalities and modules used are listed below
-
+- Here are the [API Docs](https://web.postman.co/collections/11841253-1633252c-79ac-4fe4-a42d-1447180ebc25?version=latest&workspace=5573babf-db99-44c9-8b27-4df43388e0cb)  they are being further updated
 
 
 ### How to run the project  :horse_racing:
