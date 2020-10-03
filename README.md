@@ -2,10 +2,10 @@
 
 ### About the Project :open_book:
 
-- API built using flask 
-- This is a simple API you can use as a guide
+- API built using flask a simple project 
+- This is a simple API you can use as a guide for you flask projects
 - The api comes with a bunch of functionalities
-- The api is being upgraded with more features  you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
+- The api is being upgraded with more features which I plan to work on, you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues) 
 - Different functionalities and modules used are listed below
 - Here are the [API Docs](https://web.postman.co/collections/11841253-1633252c-79ac-4fe4-a42d-1447180ebc25?version=latest&workspace=5573babf-db99-44c9-8b27-4df43388e0cb)  they are being further updated
 - If you like the project please do :star: it :innocent:
@@ -14,7 +14,7 @@
 ### How to run the project  :horse_racing:
 ```sh
 * Clone the repository 
- git clone https://github.com/DiptoChakrabarty/online-store.git
+ git clone https://github.com/DiptoChakrabarty/flask-online-store.git
 
 * Enter directory 
  cd flask-online-store
@@ -74,7 +74,7 @@ There are mainly four schemas
 
 * Users - which contains details about the users
 * Store - which contains details about the store
-* Items - which conatins deatisl about the items
+* Items - which contains details about the items
 * Order - which is for ordering stuff
 
 ### DataBase Architecture
@@ -260,6 +260,8 @@ There are mainly four schemas
 ## Contribution Guidelines  🙂
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+
+If anyone wants to take up an issuse they are free to do so .
 
 
 ## Pull Request Process
