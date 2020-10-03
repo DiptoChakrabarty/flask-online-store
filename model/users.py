@@ -6,6 +6,10 @@ import requests
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 from mail import mail 
 from flask_mail import Message
+import secrets
+import string
+alpha = string.ascii_letters + string.digits
+random = ''.join(secrets.choice(alphabet) for i in range(20))
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
@@ -19,7 +23,7 @@ class UserModel(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
-    password = db.Column(db.String(20),nullable=True)
+    password = db.Column(db.String(20),default=random)
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)    #set default as False
 
