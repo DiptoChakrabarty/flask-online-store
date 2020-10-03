@@ -3,7 +3,7 @@
 ### About the Project :open_book:
 
 - API built using flask 
-- This is a simple API you can use as a guide
+- This is a simple API you can use as a guide for you flask projects
 - The api comes with a bunch of functionalities
 - The api is being upgraded with more features  you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
 - Different functionalities and modules used are listed below
@@ -13,7 +13,7 @@
 ### How to run the project  :horse_racing:
 ```sh
 * Clone the repository 
- git clone https://github.com/DiptoChakrabarty/online-store.git
+ git clone https://github.com/DiptoChakrabarty/flask-online-store.git
 
 * Enter directory 
  cd flask-online-store
