@@ -9,7 +9,7 @@ from flask_mail import Message
 import secrets
 import string
 alpha = string.ascii_letters + string.digits
-random = ''.join(secrets.choice(alphabet) for i in range(20))
+random = ''.join(secrets.choice(alpha) for i in range(20))
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
