@@ -8,8 +8,6 @@ from mail import mail
 from flask_mail import Message
 import secrets
 import string
-alpha = string.ascii_letters + string.digits
-random = ''.join(secrets.choice(alpha) for i in range(20))
 
 MAILGUN_DOMAIN = "mailgun domain"
 MAILGUN_API_KEY =  "api key"
@@ -23,7 +21,7 @@ class UserModel(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
-    password = db.Column(db.String(20),default=random)
+    password = db.Column(db.String(20),default=UserModel.generate_sample_password())
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)    #set default as False
 
@@ -40,7 +38,6 @@ class UserModel(db.Model):
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
-    
     
     def generate_mail(self):
         serializer = URLSafeTimedSerializer("secrettoken",1800)
@@ -68,6 +65,12 @@ class UserModel(db.Model):
     def find_by_email(cls,email):
         return cls.query.filter_by(email=email).first()
     
+    @classmethod
+    def generate_sample_password(cls):
+        alpha = string.ascii_letters + string.digits
+        random = ''.join(secrets.choice(alpha) for i in range(20))
+        return random
+
     @classmethod
     def check_password(cls,username,password):
         user=cls.query.filter_by(username=username).first()
