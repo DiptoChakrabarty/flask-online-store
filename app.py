@@ -43,8 +43,8 @@ app.config["MAIL_PORT"] =  587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
 app.config["MAIL_DEBUG"] = True
-#app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")    #uncomment lines
-#app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")    #uncomment lines
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
 #app.config["MAIL_DEFAULT_SENDER"] = ("Dipto from DLDLAB",os.environ["MAIL_USERNAME"])
 app.config["MAIL_MAX_EMAILS"] = None
 app.config["MAIL_SUPRESS_SEND"] = False
@@ -127,7 +127,7 @@ api.add_resource(userlogin,"/auth")
 api.add_resource(tokenrefresh,"/refresh")
 api.add_resource(logoutuser,"/logout")
 #api.add_resource(UserConfirm,"/confirm")
-#api.add_resource(UserConfirm,"/confirm/<string:token>")    #confirm user method
+api.add_resource(UserConfirm,"/confirm/<string:token>")    #confirm user method
 api.add_resource(ImageUpload,"/imageupload") 
 api.add_resource(Images,"/image")
 api.add_resource(Github,"/login/github")
