@@ -73,7 +73,7 @@ There are mainly four schemas
 
 * Users - which contains details about the users
 * Store - which contains details about the store
-* Items - which conatins deatisl about the items
+* Items - which contains details about the items
 * Order - which is for ordering stuff
 
 ### DataBase Architecture
