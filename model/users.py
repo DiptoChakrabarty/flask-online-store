@@ -19,7 +19,7 @@ class UserModel(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
-    password = db.Column(db.String(20))
+    password = db.Column(db.String(20),nullable=True)
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)    #set default as False
 
