@@ -2,7 +2,7 @@
 
 ### About the Project :open_book:
 
-- API built using flask 
+- API built using flask a simple project 
 - This is a simple API you can use as a guide for you flask projects
 - The api comes with a bunch of functionalities
 - The api is being upgraded with more features  you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
