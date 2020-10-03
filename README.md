@@ -3,9 +3,10 @@
 ### About the Project :open_book:
 
 - API built using flask 
+- This is a simple API you can use as a guide
 - The api comes with a bunch of functionalities
-- The api is being upgraded you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
-- DataBase is integrated with the api
+- The api is being upgraded with more features  you can checkout [issues here](https://github.com/DiptoChakrabarty/online-store/issues)
+- Different functionalities and modules used are listed below
 
 
 
@@ -102,8 +103,36 @@ There are mainly four schemas
   - For all post and put methods jwt token is required
 
   - Deletion requires a fresh jwt token so might prompt you to sign in again
+  <img src="images/jwt.png">
 
-### 2) flask marshmallow
+
+### 2) flask restful
+   - [Read about it here](https://flask-restful.readthedocs.io/en/latest/)
+
+   - Used for creating resource class
+
+   - You can define the endpoints using flask restful
+   ```sh
+    class Item(Resource):
+    
+      def get(self):
+          try:
+              data = item_schema.load(request.get_json())
+              print(data.name)
+          except ValidationError as err:
+              return err.messages,400
+          print(data)
+          name = data.name
+          item = ItemModel.find_by_name(name)
+
+          if item:
+              return item_schema.dump(item)
+          return {
+              "msg": "Item not found"
+          }
+   ```
+
+### 3) flask marshmallow
   - [Read about it here](https://flask-marshmallow.readthedocs.io/en/latest/)
 
   - flask marshmallow allows us to easily seralize and desarlize data 
@@ -130,7 +159,7 @@ There are mainly four schemas
 
   - marshamllow integrates well with SQLAlchemy 
 
-### 3) OAuth2
+### 4) OAuth2
    - [Read about it here](https://flask-oauthlib.readthedocs.io/en/latest/client.html)
 
    - For OAuth we are now using GitHub 
@@ -144,7 +173,7 @@ There are mainly four schemas
    - Populate those values in .env to use github oauth
   <img src="images/github.png">
 
-### 4) flask migrate 
+### 5) flask migrate 
    - [Read about it here](https://flask-migrate.readthedocs.io/en/latest/)
 
    - flask migrate can be used to migrate the database easily 
@@ -168,7 +197,7 @@ There are mainly four schemas
     
   ```
 
-### 5) flask mail 
+### 6) flask mail 
   - [Read about it here](https://pythonhosted.org/Flask-Mail/)
 
   - flask mail allows us to integrate mailing service with flask easily
@@ -184,7 +213,7 @@ There are mainly four schemas
   
   - This is used for user confirmation during signup 
 
-### 6) Stripe
+### 7) Stripe
    - [Read about it here](https://stripe.com/docs)
 
    - Payments using stripe is integrated within the app
