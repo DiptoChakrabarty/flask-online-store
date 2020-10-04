@@ -22,12 +22,14 @@ class UserModel(db.Model):
     password = db.Column(db.String(20))
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)    #set default as False
+    seller = db.Column(db.Boolean, default=False)
 
-    def __init__(self,username,password,email,activated=True):
+    def __init__(self,username,password,email,activated=True,seller=False):
         self.username=username
         self.password=password
         self.email = email
         self.activated = activated
+        self.seller = seller
     
     def save_to_db(self):
         db.session.add(self)

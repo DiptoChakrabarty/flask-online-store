@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from model.store import StoreModel
+from model.users import UserModel
 from flask import request
 from schemas.stores import StoreSchema
-from flask_jwt_extended import  jwt_required,fresh_jwt_required
+from flask_jwt_extended import  jwt_required,fresh_jwt_required, get_jwt_identity
 
 store_schema = StoreSchema()
 store_list_schema = StoreSchema(many=True)
@@ -19,10 +20,16 @@ class Store(Resource):
     
     @jwt_required
     def post(self):
+        user = UserModel.find_by_id(get_jwt_identity())
+
+        if not user.seller:
+            return {"msg": "User is not a seller"}, 403
+
         data=request.get_json()
         name=data["name"]
-
+       
         store = StoreModel.find_by_name(name)
+
         if store:
             return {"msg": "Store exists already"},400
         
@@ -36,6 +43,11 @@ class Store(Resource):
         
     @fresh_jwt_required    
     def delete(self):
+        user = UserModel.find_by_id(get_jwt_identity())
+
+        if not user.seller:
+            return {"msg": "User is not a seller"}, 403
+
         data=request.get_json()
         name=data["name"]
 
