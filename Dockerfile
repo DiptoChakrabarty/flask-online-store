@@ -11,8 +11,6 @@ COPY . .
 # Install packages
 RUN pip3 install -r requirements.txt
 
-COPY .env.example .env
-
 RUN rm site.db
 
 EXPOSE 5000
