@@ -15,16 +15,17 @@ class Order(Resource):
     def post(cls):
         data= request.get_json()
         items=[]
-        item_quantity = Counter(data["items"])
+        ordered_list = data['items'] # list of dictionaries
 
-        for name,count in item_quantity.most_common():
+        for ordered_item in data['items']:
+            name = ordered_item['name']
+            count = ordered_item['qty']
             res = ItemModel.find_by_name(name)
             if not res:
                 return {"msg": "Item not present {}".format(name)},404
             items.append(ItemsInOrder(item_id=ItemModel.find_id(name),quantity=count))
         print(items)
-    
-    
+
         order = OrderModel(items=items,status="pending")
         order.save_to_db()  #save orders to database
 
