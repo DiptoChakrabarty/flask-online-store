@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    env_file: database.conf
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db_volume:/var/lib/db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+     - .env
+    volumes:
+      - ./:/app
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: ./app.py
+    ports:
+     - 5000:5000
+    restart: always
+    depends_on:
+      - db
+volumes:
+  data-volume:
