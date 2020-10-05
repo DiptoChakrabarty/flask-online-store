@@ -57,7 +57,7 @@
 
 * Fill the required parameters
 
-* If you have removed site.db remove teh following line in Dockerfile
+* If you have removed site.db then remove the following line in Dockerfile
   RUN rm site.db
 
 * Run using 
