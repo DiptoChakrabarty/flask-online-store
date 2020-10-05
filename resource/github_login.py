@@ -12,6 +12,16 @@ class Github(Resource):
         return github.authorize(url_for("github.authorize",_external=True))
 
 class GithubAuthorize(Resource):
+
+
+    #generate a sample password for github oauth users
+    @classmethod
+    def generate_sample_password(cls):
+        alpha = string.ascii_letters + string.digits
+        random = ''.join(secrets.choice(alpha) for i in range(20))
+        return random
+
+
     @classmethod
     def get(cls):
         response =  github.authorized_response()
@@ -30,13 +40,6 @@ class GithubAuthorize(Resource):
         
         #if UserModel.find_by_username(github_username):
         #    return {"msg": "User with username exists"}
-
-    #generate a sample password for github oauth users
-    @classmethod
-    def generate_sample_password(cls):
-        alpha = string.ascii_letters + string.digits
-        random = ''.join(secrets.choice(alpha) for i in range(20))
-        return random
 
         #add user to database
         user = UserModel(username=github_username,password=GithubAuthorize.generate_sample_password(),activated=True,email=github_email)

@@ -21,10 +21,10 @@ class UserModel(db.Model):
     username = db.Column(db.String(20),nullable=False,unique=True)
     password = db.Column(db.String(20),nullable=True)
     email = db.Column(db.String(40),nullable=False,unique=True)
-    activated = db.Column(db.Boolean,default=False)    #set default as False
+    activated = db.Column(db.Boolean,default=False)    #set default as False , if you do not email verification set as True
     seller = db.Column(db.Boolean, default=False)
 
-    def __init__(self,username,password,email,activated=True,seller=False):
+    def __init__(self,username,password,email,activated=False,seller=False): # if you do not email verification set activated as True
         self.username=username
         self.password=password
         self.email = email
