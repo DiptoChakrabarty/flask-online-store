@@ -19,7 +19,7 @@ class UserModel(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
-    password = db.Column(db.String(20))
+    password = db.Column(db.String(20),nullable=True)
     email = db.Column(db.String(40),nullable=False,unique=True)
     activated = db.Column(db.Boolean,default=False)    #set default as False
 
@@ -36,7 +36,6 @@ class UserModel(db.Model):
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
-    
     
     def generate_mail(self):
         serializer = URLSafeTimedSerializer("secrettoken",1800)
@@ -63,7 +62,7 @@ class UserModel(db.Model):
     @classmethod
     def find_by_email(cls,email):
         return cls.query.filter_by(email=email).first()
-    
+
     @classmethod
     def check_password(cls,username,password):
         user=cls.query.filter_by(username=username).first()
