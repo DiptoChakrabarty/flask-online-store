@@ -22,6 +22,7 @@ class UserRegister(Resource):
         username = data.username
         passwd = data.password
         email = data.email
+        seller = data.seller
 
         print(username,passwd,email)
         hashed = bcrypt.hashpw(passwd.encode('utf-8'),bcrypt.gensalt())
@@ -32,7 +33,7 @@ class UserRegister(Resource):
         if UserModel.find_by_email(email):
             return {"msg": "user with email id  exists"} 
         
-        user = UserModel(username,hashed,email)
+        user = UserModel(username,hashed,email,seller=seller)
         user.save_to_db()
 
         user.generate_mail()     #send emails to new users

@@ -19,15 +19,17 @@ class UserModel(db.Model):
     __tablename__="users"
     id = db.Column(db.Integer,primary_key=True)
     username = db.Column(db.String(20),nullable=False,unique=True)
-    password = db.Column(db.String(20))
+    password = db.Column(db.String(20),nullable=True)
     email = db.Column(db.String(40),nullable=False,unique=True)
-    activated = db.Column(db.Boolean,default=False)    #set default as False
+    activated = db.Column(db.Boolean,default=False)    #set default as False , if you do not email verification set as True
+    seller = db.Column(db.Boolean, default=False)
 
-    def __init__(self,username,password,email,activated=True):
+    def __init__(self,username,password,email,activated=False,seller=False): # if you do not email verification set activated as True
         self.username=username
         self.password=password
         self.email = email
         self.activated = activated
+        self.seller = seller
     
     def save_to_db(self):
         db.session.add(self)
@@ -36,7 +38,6 @@ class UserModel(db.Model):
     def delete_from_db(self):
         db.session.delete(self)
         db.session.commit()
-    
     
     def generate_mail(self):
         serializer = URLSafeTimedSerializer("secrettoken",1800)
@@ -63,7 +64,7 @@ class UserModel(db.Model):
     @classmethod
     def find_by_email(cls,email):
         return cls.query.filter_by(email=email).first()
-    
+
     @classmethod
     def check_password(cls,username,password):
         user=cls.query.filter_by(username=username).first()

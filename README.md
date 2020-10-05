@@ -12,6 +12,8 @@
 
 
 ### How to run the project  :horse_racing:
+
+ ##### To run locally 
 ```sh
 * Clone the repository 
  git clone https://github.com/DiptoChakrabarty/flask-online-store.git
@@ -45,6 +47,23 @@
 * Head over to http://localhost:5000
   (it is preferable if you use something as postman as most are post requests)
 
+
+```
+
+##### To run in docker
+```sh
+ * Set environment variables
+   cp .env.example .env
+
+* Fill the required parameters
+
+* If you have removed site.db then remove the following line in Dockerfile
+  RUN rm site.db
+
+* Run using 
+  docker-compose up -d to start as background process
+
+* Head over to http://localhost:5000
 
 ```
 
